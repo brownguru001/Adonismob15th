@@ -5,6 +5,10 @@ import { prisma } from "@/lib/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
+  // Required for self-hosted deployments behind a reverse proxy/load balancer
+  // (Docker, VPS, etc.) where Auth.js can't otherwise verify the Host header
+  // against a known deployment URL the way it can on Vercel.
+  trustHost: true,
   pages: {
     signIn: "/login",
   },
