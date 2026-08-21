@@ -13,7 +13,14 @@ export async function generateMetadata({
   const user = await getOptionalUser();
   const collection = await getCollectionBySlug(user, slug);
   if (!collection) return {};
-  return { title: collection.name, description: collection.description ?? undefined };
+  return {
+    title: collection.name,
+    description: collection.description ?? undefined,
+    robots:
+      collection.visibility === "MEMBERS_ONLY"
+        ? { index: false, follow: false }
+        : undefined,
+  };
 }
 
 export default async function CollectionPage({

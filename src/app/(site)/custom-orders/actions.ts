@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const customOrderSchema = z.object({
   productType: z.string().min(1).max(80),
@@ -15,6 +16,9 @@ const customOrderSchema = z.object({
 
 export async function submitCustomOrder(formData: FormData) {
   const user = await requireUser();
+
+  const limited = checkRateLimit(`custom-order:${user.id}`, 10, 60 * 60 * 1000);
+  if (!limited.ok) return { ok: false, error: limited.error };
 
   const referenceImages = formData.getAll("referenceImages").filter(Boolean) as string[];
 

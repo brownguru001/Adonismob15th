@@ -19,6 +19,10 @@ export async function generateMetadata({
     title: product.name,
     description: product.description.slice(0, 155),
     openGraph: { images: product.images.slice(0, 1) },
+    robots:
+      product.visibility === "MEMBERS_ONLY"
+        ? { index: false, follow: false }
+        : undefined,
   };
 }
 

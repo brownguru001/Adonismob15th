@@ -4,6 +4,7 @@ import { z } from "zod";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { createOrderFromCart, OrderValidationError, type CartLineInput } from "@/lib/orders";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const checkoutSchema = z.object({
   fullName: z.string().min(2).max(120),
@@ -23,6 +24,9 @@ export async function submitCheckout(
   if (!session?.user) {
     return { ok: false, error: "Please sign in to check out." };
   }
+
+  const limited = checkRateLimit(`checkout:${session.user.id}`, 10, 15 * 60 * 1000);
+  if (!limited.ok) return { ok: false, error: limited.error };
 
   const parsed = checkoutSchema.safeParse({
     fullName: formData.get("fullName"),

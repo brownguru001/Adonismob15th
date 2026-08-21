@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const registerSchema = z.object({
   name: z.string().min(2).max(100),
@@ -13,6 +14,10 @@ const registerSchema = z.object({
 });
 
 export async function registerCustomer(formData: FormData) {
+  const ip = await getClientIp();
+  const limited = checkRateLimit(`register:${ip}`, 5, 60 * 60 * 1000);
+  if (!limited.ok) return { ok: false, error: limited.error };
+
   const parsed = registerSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -45,6 +50,12 @@ export async function registerCustomer(formData: FormData) {
 export async function loginCustomer(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+
+  const ip = await getClientIp();
+  const ipLimited = checkRateLimit(`login-ip:${ip}`, 20, 15 * 60 * 1000);
+  if (!ipLimited.ok) return { ok: false, error: ipLimited.error };
+  const emailLimited = checkRateLimit(`login-email:${email.toLowerCase()}`, 5, 15 * 60 * 1000);
+  if (!emailLimited.ok) return { ok: false, error: "Too many failed attempts for this account. Please wait a few minutes." };
 
   try {
     await signIn("credentials", {

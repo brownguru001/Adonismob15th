@@ -97,6 +97,23 @@ initiation and verification happen exclusively in server code
 - **Audit logging.** Sensitive admin actions (product/collection/design
   changes, membership status changes, order status changes, supplier
   changes) are recorded in the `AdminAction` table via `src/lib/audit.ts`.
+- **Rate limiting.** Login (per-IP and per-account), registration, contact
+  form, custom order submission, checkout, and file uploads are all
+  rate-limited (`src/lib/rate-limit.ts`) — in-memory, fine for a
+  single-instance deployment; swap for Redis/Upstash if this ever runs
+  across multiple instances.
+- **Upload validation.** The uploads endpoint checks the actual file bytes
+  against the claimed MIME type (magic-byte signatures), not just the
+  browser-reported `Content-Type`, on top of the auth/size/extension checks.
+- **Security headers** (`X-Frame-Options`, `X-Content-Type-Options`,
+  `Referrer-Policy`, `Permissions-Policy`) are set globally in
+  `next.config.ts`. No Content-Security-Policy yet — deliberately, since a
+  wrong CSP silently breaks the app and this hasn't been tuned for one.
+- **SEO**: `src/app/sitemap.ts` and `src/app/robots.ts` cover public pages,
+  products, and collections only — the Members Collection and any
+  members-only product/collection page are excluded from the sitemap and
+  explicitly marked `noindex`, and `/admin`, `/account`, `/checkout`,
+  `/cart`, and `/api` are disallowed in `robots.txt`.
 
 ## Database
 
@@ -138,6 +155,8 @@ READY_FOR_DELIVERY → SHIPPED → DELIVERED`.
 ## What's demo-grade vs. production-ready
 
 - **Production-ready**: auth, authorization model, payment verification
-  flow, order/production/custom-order state machines, database schema.
+  flow, order/production/custom-order state machines, database schema,
+  rate limiting, SEO/robots configuration, security headers.
 - **Demo-grade, documented above**: local-disk file uploads, flat shipping
-  fee, single hardcoded currency (NGN).
+  fee, single hardcoded currency (NGN), in-memory (single-instance) rate
+  limiting, no Content-Security-Policy yet.
