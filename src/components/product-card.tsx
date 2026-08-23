@@ -8,16 +8,19 @@ export type ProductCardData = {
   price: number | string;
   images: string[];
   category: string;
-  visibility: string;
+  isPreOrder: boolean;
+  dropQuantityRemaining: number | null;
   variants: { stock: number }[];
 };
 
 export function ProductCard({ product }: { product: ProductCardData }) {
   const inStock = product.variants.some((v) => v.stock > 0);
+  const dropSoldOut = product.dropQuantityRemaining !== null && product.dropQuantityRemaining <= 0;
+  const soldOut = !inStock || dropSoldOut;
   const image = product.images[0];
 
   return (
-    <Link href={`/shop/${product.slug}`} className="group block">
+    <Link href={`/dashboard/products/${product.slug}`} className="group block">
       <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-bone-dim">
         {image ? (
           <Image
@@ -32,12 +35,12 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             No image
           </div>
         )}
-        {product.visibility === "MEMBERS_ONLY" && (
+        {product.isPreOrder && !soldOut && (
           <span className="absolute left-3 top-3 rounded-full bg-ink px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-gold">
-            Members
+            Pre-order
           </span>
         )}
-        {!inStock && (
+        {soldOut && (
           <span className="absolute right-3 top-3 rounded-full bg-bone px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-ink/60">
             Sold Out
           </span>

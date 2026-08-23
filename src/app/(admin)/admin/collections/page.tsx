@@ -17,9 +17,7 @@ export default async function AdminCollectionsPage() {
             <div key={c.id} className="flex items-center justify-between rounded-xl border border-ink/10 bg-white p-4">
               <div>
                 <p className="text-sm font-medium">{c.name}</p>
-                <p className="text-xs text-ink/50">
-                  {c._count.products} products &middot; {c.visibility === "MEMBERS_ONLY" ? "Members only" : "Public"}
-                </p>
+                <p className="text-xs text-ink/50">{c._count.products} products</p>
               </div>
               {c.featured && <span className="rounded-full bg-gold/20 px-2 py-0.5 text-[10px] text-gold">Featured</span>}
             </div>

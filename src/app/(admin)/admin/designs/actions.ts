@@ -11,7 +11,6 @@ const designSchema = z.object({
   description: z.string().max(2000).optional(),
   imageUrl: z.string().url(),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
-  visibility: z.enum(["PUBLIC", "MEMBERS_ONLY"]),
   collectionId: z.string().optional(),
 });
 
@@ -22,7 +21,6 @@ export async function createDesign(formData: FormData) {
     description: formData.get("description") || undefined,
     imageUrl: formData.get("imageUrl"),
     status: formData.get("status"),
-    visibility: formData.get("visibility"),
     collectionId: formData.get("collectionId") || undefined,
   });
 

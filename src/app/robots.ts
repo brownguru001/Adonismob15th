@@ -1,26 +1,10 @@
 import type { MetadataRoute } from "next";
 
+// This is a private, invite-only platform. There is nothing on it meant to
+// be discoverable by search engines — disallow everything, and there is no
+// sitemap.xml for the same reason.
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: [
-          "/admin",
-          "/admin/",
-          "/account",
-          "/account/",
-          "/api/",
-          "/checkout",
-          "/cart",
-          "/members",
-          "/members/",
-        ],
-      },
-    ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [{ userAgent: "*", disallow: "/" }],
   };
 }

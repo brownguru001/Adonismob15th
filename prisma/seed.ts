@@ -6,22 +6,20 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 const IMG = {
-  hero1: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&q=80",
-  hero2: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=1200&q=80",
   hoodie1: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=1200&q=80",
   hoodie2: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1200&q=80",
   tee1: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&q=80",
   tee2: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=1200&q=80",
   cap1: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=1200&q=80",
   jacket1: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=1200&q=80",
-  members1: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200&q=80",
+  emblem1: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200&q=80",
   collectionCover1: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=1200&q=80",
   collectionCover2: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200&q=80",
   collectionCover3: "https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=1200&q=80",
 };
 
 async function main() {
-  console.log("Seeding ADONISMOB15TH demo data...");
+  console.log("Seeding ADONISMOB15TH private platform demo data...");
 
   // ---- Admin ----
   const adminPasswordHash = await bcrypt.hash("Adonis15th!Admin", 12);
@@ -36,65 +34,94 @@ async function main() {
     },
   });
 
-  // ---- Demo customers ----
-  const customerPasswordHash = await bcrypt.hash("Demo1234!", 12);
+  // ---- Demo members ----
+  const memberPasswordHash = await bcrypt.hash("Demo1234!", 12);
 
-  const customer1 = await prisma.user.upsert({
+  const member1 = await prisma.user.upsert({
     where: { email: "amara@example.com" },
     update: {},
     create: {
       name: "Amara Okafor",
       email: "amara@example.com",
-      passwordHash: customerPasswordHash,
-      role: "CUSTOMER",
+      passwordHash: memberPasswordHash,
+      role: "MEMBER",
       phone: "+2348012345001",
     },
   });
 
-  const customer2 = await prisma.user.upsert({
+  const member2 = await prisma.user.upsert({
     where: { email: "tunde@example.com" },
     update: {},
     create: {
       name: "Tunde Bakare",
       email: "tunde@example.com",
-      passwordHash: customerPasswordHash,
-      role: "CUSTOMER",
+      passwordHash: memberPasswordHash,
+      role: "MEMBER",
       phone: "+2348012345002",
     },
   });
 
-  const customer3 = await prisma.user.upsert({
+  const member3 = await prisma.user.upsert({
     where: { email: "zainab@example.com" },
     update: {},
     create: {
       name: "Zainab Yusuf",
       email: "zainab@example.com",
-      passwordHash: customerPasswordHash,
-      role: "CUSTOMER",
+      passwordHash: memberPasswordHash,
+      role: "MEMBER",
       phone: "+2348012345003",
     },
   });
 
   // ---- Memberships ----
+  // Every account here is invite-equivalent — in the real flow these would
+  // be created by redeeming an admin-issued invitation. Tunde is seeded as
+  // SUSPENDED to demonstrate access being cut off without deleting history.
   await prisma.membership.upsert({
-    where: { userId: customer1.id },
+    where: { userId: member1.id },
     update: {},
     create: {
-      userId: customer1.id,
+      userId: member1.id,
       status: "VERIFIED",
       verifiedAt: new Date(),
       verifiedById: admin.id,
-      note: "Early supporter, referred by founder.",
+      note: "Founding member.",
     },
   });
 
   await prisma.membership.upsert({
-    where: { userId: customer2.id },
+    where: { userId: member2.id },
     update: {},
     create: {
-      userId: customer2.id,
-      status: "PENDING",
-      note: "Applied via website, active on socials.",
+      userId: member2.id,
+      status: "SUSPENDED",
+      verifiedAt: new Date(),
+      verifiedById: admin.id,
+      note: "Suspended pending review.",
+    },
+  });
+
+  await prisma.membership.upsert({
+    where: { userId: member3.id },
+    update: {},
+    create: {
+      userId: member3.id,
+      status: "VERIFIED",
+      verifiedAt: new Date(),
+      verifiedById: admin.id,
+      note: "Joined via invitation.",
+    },
+  });
+
+  // ---- A pending invitation, for the admin Access page ----
+  await prisma.invitation.upsert({
+    where: { code: "seed-demo-invite" },
+    update: {},
+    create: {
+      code: "seed-demo-invite",
+      email: "prospect@example.com",
+      invitedById: admin.id,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     },
   });
 
@@ -105,9 +132,8 @@ async function main() {
     create: {
       name: "Heritage Drop",
       slug: "heritage-drop",
-      description: "Our founding collection — bold graphics rooted in African identity.",
+      description: "Founding collection — bold graphics rooted in African identity.",
       coverImage: IMG.collectionCover1,
-      visibility: "PUBLIC",
       featured: true,
     },
   });
@@ -120,20 +146,18 @@ async function main() {
       slug: "everyday-essentials",
       description: "Clean, wearable staples for daily rotation.",
       coverImage: IMG.collectionCover3,
-      visibility: "PUBLIC",
       featured: false,
     },
   });
 
-  const foundersCircle = await prisma.collection.upsert({
-    where: { slug: "founders-circle" },
+  const emblemCollection = await prisma.collection.upsert({
+    where: { slug: "emblem-series" },
     update: {},
     create: {
-      name: "Founders Circle",
-      slug: "founders-circle",
-      description: "Reserved for verified members — designs that never reach the public shop.",
+      name: "Emblem Series",
+      slug: "emblem-series",
+      description: "Limited-run pieces carrying the embroidered emblem.",
       coverImage: IMG.collectionCover2,
-      visibility: "MEMBERS_ONLY",
       featured: true,
     },
   });
@@ -145,7 +169,6 @@ async function main() {
       description: "A modern grid layout referencing traditional Adinkra symbols.",
       imageUrl: IMG.hoodie1,
       status: "PUBLISHED",
-      visibility: "PUBLIC",
       collectionId: heritageDrop.id,
     },
   });
@@ -156,19 +179,17 @@ async function main() {
       description: "Minimal skyline linework across the chest.",
       imageUrl: IMG.tee2,
       status: "PUBLISHED",
-      visibility: "PUBLIC",
       collectionId: everyday.id,
     },
   });
 
   const design3 = await prisma.design.create({
     data: {
-      title: "Founders Emblem",
-      description: "The members-only emblem, embroidered.",
-      imageUrl: IMG.members1,
+      title: "Emblem",
+      description: "The embroidered emblem, centered on the chest.",
+      imageUrl: IMG.emblem1,
       status: "PUBLISHED",
-      visibility: "MEMBERS_ONLY",
-      collectionId: foundersCircle.id,
+      collectionId: emblemCollection.id,
     },
   });
 
@@ -182,13 +203,15 @@ async function main() {
     cost: number;
     images: string[];
     careInfo: string;
-    visibility: "PUBLIC" | "MEMBERS_ONLY";
     featured: boolean;
+    isPreOrder?: boolean;
+    preOrderClosesAt?: Date;
+    dropQuantityLimit?: number;
     collectionId: string;
     designId: string;
     variants: { size: string; color: string; stock: number }[];
   }) {
-    const product = await prisma.product.upsert({
+    return prisma.product.upsert({
       where: { slug: data.slug },
       update: {},
       create: {
@@ -200,8 +223,11 @@ async function main() {
         cost: data.cost,
         images: data.images,
         careInfo: data.careInfo,
-        visibility: data.visibility,
         featured: data.featured,
+        isPreOrder: data.isPreOrder ?? false,
+        preOrderClosesAt: data.preOrderClosesAt ?? null,
+        dropQuantityLimit: data.dropQuantityLimit ?? null,
+        dropQuantityRemaining: data.dropQuantityLimit ?? null,
         collectionId: data.collectionId,
         designId: data.designId,
         variants: {
@@ -215,7 +241,6 @@ async function main() {
       },
       include: { variants: true },
     });
-    return product;
   }
 
   const hoodie = await upsertProduct({
@@ -228,7 +253,6 @@ async function main() {
     cost: 14000,
     images: [IMG.hoodie1, IMG.hoodie2],
     careInfo: "Machine wash cold, inside out. Do not tumble dry.",
-    visibility: "PUBLIC",
     featured: true,
     collectionId: heritageDrop.id,
     designId: design1.id,
@@ -240,7 +264,7 @@ async function main() {
     ],
   });
 
-  const tee = await upsertProduct({
+  await upsertProduct({
     slug: "lagos-skyline-tee",
     name: "Lagos Skyline Tee",
     description: "100% cotton tee with minimal skyline linework across the chest.",
@@ -249,7 +273,6 @@ async function main() {
     cost: 5200,
     images: [IMG.tee1, IMG.tee2],
     careInfo: "Machine wash cold. Hang dry recommended.",
-    visibility: "PUBLIC",
     featured: true,
     collectionId: everyday.id,
     designId: design2.id,
@@ -270,7 +293,6 @@ async function main() {
     cost: 3200,
     images: [IMG.cap1],
     careInfo: "Spot clean only.",
-    visibility: "PUBLIC",
     featured: false,
     collectionId: heritageDrop.id,
     designId: design1.id,
@@ -280,39 +302,39 @@ async function main() {
   await upsertProduct({
     slug: "everyday-utility-jacket",
     name: "Everyday Utility Jacket",
-    description: "Lightweight cotton utility jacket built for layering.",
+    description: "Lightweight cotton utility jacket built for layering. Made to order — production begins once pre-orders close.",
     category: "jacket",
     price: 42000,
     cost: 19000,
     images: [IMG.jacket1],
     careInfo: "Machine wash cold. Do not bleach.",
-    visibility: "PUBLIC",
     featured: false,
+    isPreOrder: true,
+    preOrderClosesAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
     collectionId: everyday.id,
     designId: design2.id,
     variants: [
-      { size: "M", color: "Olive", stock: 2 },
-      { size: "L", color: "Olive", stock: 4 },
+      { size: "M", color: "Olive", stock: 0 },
+      { size: "L", color: "Olive", stock: 0 },
     ],
   });
 
-  await upsertProduct({
-    slug: "founders-emblem-hoodie",
-    name: "Founders Emblem Hoodie",
-    description:
-      "Members-only hoodie with the embroidered Founders emblem. Never sold in the public shop.",
+  const emblemHoodie = await upsertProduct({
+    slug: "emblem-hoodie",
+    name: "Emblem Hoodie",
+    description: "Limited-run hoodie with the embroidered emblem. Once it's gone, it's gone.",
     category: "hoodie",
     price: 45000,
     cost: 18000,
-    images: [IMG.members1, IMG.hoodie2],
+    images: [IMG.emblem1, IMG.hoodie2],
     careInfo: "Machine wash cold, inside out.",
-    visibility: "MEMBERS_ONLY",
     featured: true,
-    collectionId: foundersCircle.id,
+    dropQuantityLimit: 30,
+    collectionId: emblemCollection.id,
     designId: design3.id,
     variants: [
-      { size: "M", color: "Black", stock: 6 },
-      { size: "L", color: "Black", stock: 6 },
+      { size: "M", color: "Black", stock: 15 },
+      { size: "L", color: "Black", stock: 15 },
     ],
   });
 
@@ -338,8 +360,8 @@ async function main() {
   // ---- Demo orders ----
   const order1Address = await prisma.address.create({
     data: {
-      userId: customer1.id,
-      fullName: customer1.name,
+      userId: member1.id,
+      fullName: member1.name,
       phone: "+2348012345001",
       line1: "12 Admiralty Way",
       city: "Lekki",
@@ -350,14 +372,14 @@ async function main() {
   await prisma.order.create({
     data: {
       orderNumber: "AM15-DEMO-0001",
-      userId: customer1.id,
+      userId: member1.id,
       addressId: order1Address.id,
       status: "DELIVERED",
       subtotal: 32000,
       shippingFee: 2500,
       total: 34500,
-      customerEmail: customer1.email,
-      customerPhone: customer1.phone ?? "+2348012345001",
+      customerEmail: member1.email,
+      customerPhone: member1.phone ?? "+2348012345001",
       items: {
         create: [
           {
@@ -375,7 +397,7 @@ async function main() {
           { status: "PAID", note: "Payment verified via Flutterwave." },
           { status: "PRODUCTION", note: "Sent to Lagos Print Collective." },
           { status: "SHIPPED", note: "Handed to courier." },
-          { status: "DELIVERED", note: "Delivered to customer." },
+          { status: "DELIVERED", note: "Delivered to member." },
         ],
       },
       payments: {
@@ -397,8 +419,8 @@ async function main() {
 
   const order2Address = await prisma.address.create({
     data: {
-      userId: customer3.id,
-      fullName: customer3.name,
+      userId: member3.id,
+      fullName: member3.name,
       phone: "+2348012345003",
       line1: "5 Awolowo Road",
       city: "Ikoyi",
@@ -409,22 +431,22 @@ async function main() {
   await prisma.order.create({
     data: {
       orderNumber: "AM15-DEMO-0002",
-      userId: customer3.id,
+      userId: member3.id,
       addressId: order2Address.id,
       status: "PRODUCTION",
-      subtotal: 14000,
+      subtotal: 45000,
       shippingFee: 2500,
-      total: 16500,
-      customerEmail: customer3.email,
-      customerPhone: customer3.phone ?? "+2348012345003",
+      total: 47500,
+      customerEmail: member3.email,
+      customerPhone: member3.phone ?? "+2348012345003",
       items: {
         create: [
           {
-            productId: tee.id,
-            variantId: tee.variants[1].id,
+            productId: emblemHoodie.id,
+            variantId: emblemHoodie.variants[0].id,
             quantity: 1,
-            unitPrice: 14000,
-            lineTotal: 14000,
+            unitPrice: 45000,
+            lineTotal: 45000,
           },
         ],
       },
@@ -439,7 +461,7 @@ async function main() {
         create: [
           {
             txRef: "AM15-TX-DEMO-0002",
-            amount: 16500,
+            amount: 47500,
             status: "SUCCESSFUL",
             providerRef: "demo-flw-ref-0002",
             verifiedAt: new Date(),
@@ -455,13 +477,13 @@ async function main() {
   await prisma.order.create({
     data: {
       orderNumber: "AM15-DEMO-0003",
-      userId: customer1.id,
+      userId: member1.id,
       status: "PENDING_PAYMENT",
       subtotal: 9500,
       shippingFee: 2500,
       total: 12000,
-      customerEmail: customer1.email,
-      customerPhone: customer1.phone ?? "+2348012345001",
+      customerEmail: member1.email,
+      customerPhone: member1.phone ?? "+2348012345001",
       items: {
         create: [
           {
@@ -485,18 +507,18 @@ async function main() {
   // ---- Custom orders ----
   await prisma.customOrder.create({
     data: {
-      userId: customer2.id,
+      userId: member2.id,
       productType: "Hoodie",
       quantity: 20,
       sizes: "5x S, 10x M, 5x L",
-      designNotes: "Team hoodie for our run club — logo on chest, club name on back in gold.",
+      designNotes: "Custom run — logo on chest, text on back in gold.",
       colorPreference: "Black with gold print",
       status: "QUOTE_SENT",
       quotedPrice: 520000,
       adminNotes: "Bulk order, confirmed capacity with Lagos Print Collective.",
       statusEvents: {
         create: [
-          { status: "SUBMITTED", note: "Request submitted by customer." },
+          { status: "SUBMITTED", note: "Request submitted by member." },
           { status: "REVIEWING", note: "Reviewed design and quantity." },
           { status: "QUOTE_SENT", note: "Quoted at 520000" },
         ],
@@ -506,13 +528,13 @@ async function main() {
 
   await prisma.customOrder.create({
     data: {
-      userId: customer3.id,
+      userId: member3.id,
       productType: "T-shirt",
       quantity: 3,
       sizes: "3x M",
-      designNotes: "Custom text on back: 'ZARA'S 30TH'. Front: small logo.",
+      designNotes: "Custom text on back. Front: small logo.",
       status: "SUBMITTED",
-      statusEvents: { create: [{ status: "SUBMITTED", note: "Request submitted by customer." }] },
+      statusEvents: { create: [{ status: "SUBMITTED", note: "Request submitted by member." }] },
     },
   });
 
@@ -520,16 +542,16 @@ async function main() {
   await prisma.contactMessage.createMany({
     data: [
       {
-        name: "Chinedu Obi",
-        email: "chinedu.obi@example.com",
-        subject: "Wholesale inquiry",
-        message: "Do you offer wholesale pricing for boutiques? Interested in stocking the Heritage Drop.",
-      },
-      {
-        name: "Fatima Bello",
-        email: "fatima.bello@example.com",
+        name: "Amara Okafor",
+        email: "amara@example.com",
         subject: "Sizing question",
         message: "Does the Adinkra Grid Hoodie run true to size or oversized?",
+      },
+      {
+        name: "Zainab Yusuf",
+        email: "zainab@example.com",
+        subject: "Delivery timeline",
+        message: "How long does production usually take for the Emblem Hoodie?",
         isRead: true,
       },
     ],
@@ -537,9 +559,10 @@ async function main() {
 
   console.log("Seed complete.");
   console.log("Admin login: admin@adonismob15th.com / Adonis15th!Admin");
-  console.log("Customer login (verified member): amara@example.com / Demo1234!");
-  console.log("Customer login (pending member): tunde@example.com / Demo1234!");
-  console.log("Customer login (no membership): zainab@example.com / Demo1234!");
+  console.log("Member login (verified): amara@example.com / Demo1234!");
+  console.log("Member login (suspended): tunde@example.com / Demo1234!");
+  console.log("Member login (verified): zainab@example.com / Demo1234!");
+  console.log("Pending invitation code: seed-demo-invite (visit /invite/seed-demo-invite)");
 }
 
 main()

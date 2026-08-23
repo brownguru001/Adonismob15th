@@ -2,19 +2,12 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { generateOrderNumber, generateTxRef } from "@/lib/utils";
 import { initiatePayment } from "@/lib/flutterwave";
-import type { Viewer } from "@/lib/catalog";
 
 const SHIPPING_FEE = 2500;
 
 export type CartLineInput = { variantId: string; quantity: number };
 
 export class OrderValidationError extends Error {}
-
-function canSeeMembersOnly(viewer: Viewer) {
-  if (!viewer) return false;
-  if (viewer.role === "ADMIN") return true;
-  return viewer.membershipStatus === "VERIFIED";
-}
 
 /**
  * Recomputes every line item's price from the database — the cart the
@@ -24,7 +17,6 @@ function canSeeMembersOnly(viewer: Viewer) {
  */
 export async function createOrderFromCart(params: {
   userId: string;
-  viewer: Viewer;
   customerEmail: string;
   customerPhone: string;
   customerName: string;
@@ -64,14 +56,17 @@ export async function createOrderFromCart(params: {
     if (!variant || !variant.product.isActive) {
       throw new OrderValidationError("One of the items in your cart is no longer available.");
     }
-    if (variant.product.visibility === "MEMBERS_ONLY" && !canSeeMembersOnly(params.viewer)) {
-      throw new OrderValidationError("One of the items in your cart requires verified membership.");
-    }
     if (item.quantity < 1 || item.quantity > 20) {
       throw new OrderValidationError("Invalid quantity.");
     }
     if (variant.stock < item.quantity) {
       throw new OrderValidationError(`Not enough stock for ${variant.product.name} (${variant.size}/${variant.color}).`);
+    }
+    if (
+      variant.product.dropQuantityRemaining !== null &&
+      variant.product.dropQuantityRemaining < item.quantity
+    ) {
+      throw new OrderValidationError(`${variant.product.name} — this drop doesn't have enough units left.`);
     }
 
     const unitPrice = Number(variant.product.price) + Number(variant.priceDelta);
@@ -123,6 +118,13 @@ export async function createOrderFromCart(params: {
         where: { id: item.variantId },
         data: { stock: { decrement: item.quantity } },
       });
+      const variant = variantMap.get(item.variantId)!;
+      if (variant.product.dropQuantityRemaining !== null) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { dropQuantityRemaining: { decrement: item.quantity } },
+        });
+      }
     }
 
     return createdOrder;

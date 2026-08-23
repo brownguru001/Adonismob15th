@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { submitContactMessage } from "@/app/(site)/contact/actions";
+import { submitContactMessage } from "@/app/(member)/dashboard/contact/actions";
 
 export function ContactForm() {
   const [isPending, startTransition] = useTransition();

@@ -30,8 +30,12 @@ export default async function EditProductPage({
             cost: Number(product.cost),
             careInfo: product.careInfo ?? "",
             images: product.images,
-            visibility: product.visibility,
             featured: product.featured,
+            isPreOrder: product.isPreOrder,
+            preOrderClosesAt: product.preOrderClosesAt
+              ? product.preOrderClosesAt.toISOString().slice(0, 10)
+              : "",
+            dropQuantityLimit: product.dropQuantityLimit,
             collectionId: product.collectionId ?? "",
             designId: product.designId ?? "",
             variants: product.variants.map((v) => ({

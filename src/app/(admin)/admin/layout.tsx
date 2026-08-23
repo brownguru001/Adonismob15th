@@ -20,8 +20,8 @@ const navGroups = [
   {
     label: "People",
     links: [
-      { href: "/admin/customers", label: "Customers" },
       { href: "/admin/members", label: "Members" },
+      { href: "/admin/access", label: "Access" },
     ],
   },
   {
@@ -77,7 +77,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="border-t border-bone/10 px-4 py-4">
           <p className="px-2 text-xs text-bone/50">{user.email}</p>
           <div className="mt-2 flex gap-3 px-2 text-xs">
-            <Link href="/" className="text-bone/50 hover:text-bone">
+            <Link href="/dashboard" className="text-bone/50 hover:text-bone">
               View site
             </Link>
             <form

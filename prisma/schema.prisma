@@ -13,7 +13,6 @@ datasource db {
 // ---------- Enums ----------
 
 enum Role {
-  CUSTOMER
   MEMBER
   ADMIN
 }
@@ -30,11 +29,6 @@ enum InvitationStatus {
   ACCEPTED
   EXPIRED
   REVOKED
-}
-
-enum Visibility {
-  PUBLIC
-  MEMBERS_ONLY
 }
 
 enum DesignStatus {
@@ -103,7 +97,7 @@ model User {
   passwordHash  String
   name          String
   phone         String?
-  role          Role     @default(CUSTOMER)
+  role          Role     @default(MEMBER)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -175,7 +169,6 @@ model Collection {
   coverImage  String?
   startDate   DateTime?
   endDate     DateTime?
-  visibility  Visibility @default(PUBLIC)
   featured    Boolean    @default(false)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -183,7 +176,6 @@ model Collection {
   products    Product[]
   designs     Design[]
 
-  @@index([visibility])
   @@index([featured])
 }
 
@@ -193,7 +185,6 @@ model Design {
   description   String?
   imageUrl      String
   status        DesignStatus @default(DRAFT)
-  visibility    Visibility   @default(PUBLIC)
   collectionId  String?
   collection    Collection?  @relation(fields: [collectionId], references: [id])
   createdAt     DateTime     @default(now())
@@ -202,33 +193,36 @@ model Design {
   products      Product[]
 
   @@index([status])
-  @@index([visibility])
 }
 
 model Product {
-  id            String     @id @default(cuid())
-  name          String
-  slug          String     @unique
-  description   String
-  category      String
-  price         Decimal    @db.Decimal(10, 2)
-  cost          Decimal    @db.Decimal(10, 2) @default(0)
-  images        String[]
-  careInfo      String?
-  visibility    Visibility @default(PUBLIC)
-  featured      Boolean    @default(false)
-  isActive      Boolean    @default(true)
-  collectionId  String?
-  collection    Collection? @relation(fields: [collectionId], references: [id])
-  designId      String?
-  design        Design?    @relation(fields: [designId], references: [id])
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id                    String     @id @default(cuid())
+  name                  String
+  slug                  String     @unique
+  description           String
+  category              String
+  price                 Decimal    @db.Decimal(10, 2)
+  cost                  Decimal    @db.Decimal(10, 2) @default(0)
+  images                String[]
+  careInfo              String?
+  featured              Boolean    @default(false)
+  isActive              Boolean    @default(true)
+  // Pre-order / limited-drop foundation — deliberately minimal. Not every
+  // product uses these; null means "not a pre-order" / "no drop cap".
+  isPreOrder            Boolean    @default(false)
+  preOrderClosesAt      DateTime?
+  dropQuantityLimit     Int?
+  dropQuantityRemaining Int?
+  collectionId          String?
+  collection            Collection? @relation(fields: [collectionId], references: [id])
+  designId              String?
+  design                Design?    @relation(fields: [designId], references: [id])
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
 
   variants      ProductVariant[]
   orderItems    OrderItem[]
 
-  @@index([visibility])
   @@index([category])
   @@index([featured])
 }

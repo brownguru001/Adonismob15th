@@ -85,15 +85,9 @@ export function CollectionForm() {
           <input name="endDate" type="date" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
         </div>
       </div>
-      <div className="flex items-center justify-between">
-        <select name="visibility" defaultValue="PUBLIC" className="rounded-lg border border-ink/15 px-3 py-2 text-sm">
-          <option value="PUBLIC">Public</option>
-          <option value="MEMBERS_ONLY">Members Only</option>
-        </select>
-        <label className="flex items-center gap-2 text-sm">
-          <input name="featured" type="checkbox" className="h-4 w-4" /> Featured
-        </label>
-      </div>
+      <label className="flex items-center gap-2 text-sm">
+        <input name="featured" type="checkbox" className="h-4 w-4" /> Featured
+      </label>
       <button
         disabled={isPending || uploading}
         className="rounded-full bg-ink px-6 py-3 text-sm font-semibold text-bone hover:bg-ink-soft disabled:opacity-50"

@@ -15,8 +15,10 @@ export type ProductFormValue = {
   cost: number;
   careInfo: string;
   images: string[];
-  visibility: "PUBLIC" | "MEMBERS_ONLY";
   featured: boolean;
+  isPreOrder: boolean;
+  preOrderClosesAt: string;
+  dropQuantityLimit: number | null;
   collectionId: string;
   designId: string;
   variants: Variant[];
@@ -144,15 +146,41 @@ export function ProductForm({
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Visibility</label>
-          <select
-            name="visibility"
-            defaultValue={initial?.visibility ?? "PUBLIC"}
+          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+            Limited drop quantity
+          </label>
+          <input
+            name="dropQuantityLimit"
+            type="number"
+            min={0}
+            placeholder="Leave blank if not limited"
+            defaultValue={initial?.dropQuantityLimit ?? ""}
             className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
-          >
-            <option value="PUBLIC">Public</option>
-            <option value="MEMBERS_ONLY">Members Only</option>
-          </select>
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex items-end gap-2 pb-2">
+          <input
+            id="isPreOrder"
+            name="isPreOrder"
+            type="checkbox"
+            defaultChecked={initial?.isPreOrder}
+            className="h-4 w-4"
+          />
+          <label htmlFor="isPreOrder" className="text-sm">Pre-order</label>
+        </div>
+        <div>
+          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+            Pre-order closes
+          </label>
+          <input
+            name="preOrderClosesAt"
+            type="date"
+            defaultValue={initial?.preOrderClosesAt}
+            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          />
         </div>
       </div>
 

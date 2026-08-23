@@ -6,12 +6,13 @@ async function getStats() {
   const [
     revenueAgg,
     orderCount,
-    customerCount,
+    memberCount,
     verifiedMemberCount,
     productCount,
     pendingOrders,
     productionOrders,
     pendingCustomOrders,
+    pendingInvitations,
     lowStockVariants,
     recentOrders,
     recentCustomOrders,
@@ -21,7 +22,7 @@ async function getStats() {
       where: { status: { in: ["PAID", "PROCESSING", "PRODUCTION", "READY", "SHIPPED", "DELIVERED"] } },
     }),
     prisma.order.count(),
-    prisma.user.count({ where: { role: "CUSTOMER" } }),
+    prisma.user.count({ where: { role: "MEMBER" } }),
     prisma.membership.count({ where: { status: "VERIFIED" } }),
     prisma.product.count({ where: { isActive: true } }),
     prisma.order.count({ where: { status: "PENDING_PAYMENT" } }),
@@ -29,6 +30,7 @@ async function getStats() {
     prisma.customOrder.count({
       where: { status: { in: ["SUBMITTED", "REVIEWING", "QUOTE_SENT"] } },
     }),
+    prisma.invitation.count({ where: { status: "PENDING" } }),
     prisma.productVariant.findMany({
       where: { stock: { lte: 3 } },
       include: { product: true },
@@ -60,12 +62,13 @@ async function getStats() {
   return {
     revenue: revenueAgg._sum.total ?? 0,
     orderCount,
-    customerCount,
+    memberCount,
     verifiedMemberCount,
     productCount,
     pendingOrders,
     productionOrders,
     pendingCustomOrders,
+    pendingInvitations,
     lowStockVariants,
     recentOrders,
     recentCustomOrders,
@@ -82,12 +85,13 @@ export default async function AdminDashboardPage() {
   const cards = [
     { label: "Revenue (paid orders)", value: formatNaira(stats.revenue) },
     { label: "Total Orders", value: stats.orderCount },
-    { label: "Customers", value: stats.customerCount },
+    { label: "Members", value: stats.memberCount },
     { label: "Verified Members", value: stats.verifiedMemberCount },
     { label: "Active Products", value: stats.productCount },
     { label: "Pending Payment", value: stats.pendingOrders },
     { label: "In Production", value: stats.productionOrders },
     { label: "Custom Requests Open", value: stats.pendingCustomOrders },
+    { label: "Invitations Pending", value: stats.pendingInvitations },
   ];
 
   return (

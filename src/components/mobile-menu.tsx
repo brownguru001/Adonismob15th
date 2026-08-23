@@ -6,11 +6,9 @@ import { Menu as MenuIcon, X } from "lucide-react";
 
 export function Menu({
   links,
-  isAuthed,
   isAdmin,
 }: {
   links: { href: string; label: string }[];
-  isAuthed: boolean;
   isAdmin: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -43,15 +41,9 @@ export function Menu({
                   Admin
                 </Link>
               )}
-              {isAuthed ? (
-                <Link href="/account" onClick={() => setOpen(false)} className="block py-1 text-ink/80">
-                  Account
-                </Link>
-              ) : (
-                <Link href="/login" onClick={() => setOpen(false)} className="block py-1 text-ink/80">
-                  Sign in
-                </Link>
-              )}
+              <Link href="/dashboard" onClick={() => setOpen(false)} className="block py-1 text-ink/80">
+                Account
+              </Link>
             </div>
           </nav>
         </div>

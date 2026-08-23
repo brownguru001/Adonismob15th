@@ -7,44 +7,70 @@ import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
-const registerSchema = z.object({
+const redeemSchema = z.object({
+  code: z.string().min(1),
   name: z.string().min(2).max(100),
-  email: z.string().email(),
   password: z.string().min(8).max(72),
 });
 
-export async function registerCustomer(formData: FormData) {
+/**
+ * The only way an account can be created on this platform. There is no
+ * public registration — a code only exists because an admin issued it via
+ * the Access section, and it's single-use and expiring.
+ */
+export async function redeemInvitation(
+  formData: FormData
+): Promise<{ ok: true; email: string } | { ok: false; error: string }> {
   const ip = await getClientIp();
-  const limited = checkRateLimit(`register:${ip}`, 5, 60 * 60 * 1000);
+  const limited = checkRateLimit(`redeem-invite:${ip}`, 10, 60 * 60 * 1000);
   if (!limited.ok) return { ok: false, error: limited.error };
 
-  const parsed = registerSchema.safeParse({
+  const parsed = redeemSchema.safeParse({
+    code: formData.get("code"),
     name: formData.get("name"),
-    email: formData.get("email"),
     password: formData.get("password"),
   });
-
   if (!parsed.success) {
     return { ok: false, error: "Please check your details — password must be at least 8 characters." };
   }
 
-  const email = parsed.data.email.toLowerCase();
+  const invitation = await prisma.invitation.findUnique({ where: { code: parsed.data.code } });
+  if (!invitation || invitation.status !== "PENDING" || invitation.expiresAt < new Date()) {
+    return { ok: false, error: "This invitation is invalid or has expired." };
+  }
+
+  const email = invitation.email.toLowerCase();
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return { ok: false, error: "An account with this email already exists." };
   }
 
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);
-  await prisma.user.create({
-    data: {
-      name: parsed.data.name,
-      email,
-      passwordHash,
-      role: "CUSTOMER",
-    },
-  });
 
-  return { ok: true };
+  await prisma.$transaction([
+    prisma.user.create({
+      data: {
+        name: parsed.data.name,
+        email,
+        passwordHash,
+        role: "MEMBER",
+        membership: {
+          create: {
+            status: "VERIFIED",
+            verifiedAt: new Date(),
+            verifiedById: invitation.invitedById,
+            note: "Joined via invitation.",
+          },
+        },
+      },
+    }),
+    prisma.invitation.update({
+      where: { id: invitation.id },
+      data: { status: "ACCEPTED", acceptedAt: new Date() },
+    }),
+  ]);
+
+  return { ok: true, email };
 }
 
 export async function loginCustomer(formData: FormData) {

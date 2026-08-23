@@ -70,7 +70,7 @@ export function AddToCart({
       quantity,
     });
     toast.success(`Added ${product.name} to cart`);
-    if (navigateToCheckout) router.push("/checkout");
+    if (navigateToCheckout) router.push("/dashboard/checkout");
   }
 
   return (

@@ -9,18 +9,18 @@ export async function GET(req: NextRequest) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
 
   if (!transactionId) {
-    return NextResponse.redirect(`${appUrl}/checkout?payment=missing`);
+    return NextResponse.redirect(`${appUrl}/dashboard/checkout?payment=missing`);
   }
 
   try {
     const result = await confirmFlutterwaveTransaction(transactionId);
     if (!result.ok) {
-      return NextResponse.redirect(`${appUrl}/checkout?payment=failed`);
+      return NextResponse.redirect(`${appUrl}/dashboard/checkout?payment=failed`);
     }
     return NextResponse.redirect(
-      `${appUrl}/account/orders/${result.order.orderNumber}?payment=success`
+      `${appUrl}/dashboard/orders/${result.order.orderNumber}?payment=success`
     );
   } catch {
-    return NextResponse.redirect(`${appUrl}/checkout?payment=error`);
+    return NextResponse.redirect(`${appUrl}/dashboard/checkout?payment=error`);
   }
 }

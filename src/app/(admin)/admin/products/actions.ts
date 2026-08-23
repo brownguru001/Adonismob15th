@@ -22,8 +22,10 @@ const productSchema = z.object({
   cost: z.coerce.number().min(0).default(0),
   careInfo: z.string().max(1000).optional(),
   images: z.array(z.string().url()).min(1),
-  visibility: z.enum(["PUBLIC", "MEMBERS_ONLY"]),
   featured: z.coerce.boolean().default(false),
+  isPreOrder: z.coerce.boolean().default(false),
+  preOrderClosesAt: z.string().optional(),
+  dropQuantityLimit: z.coerce.number().int().min(0).optional(),
   collectionId: z.string().optional(),
   designId: z.string().optional(),
   variants: z.array(variantSchema).min(1),
@@ -41,8 +43,10 @@ function parseFormData(formData: FormData) {
     cost: formData.get("cost") || 0,
     careInfo: formData.get("careInfo") || undefined,
     images,
-    visibility: formData.get("visibility"),
     featured: formData.get("featured") === "on",
+    isPreOrder: formData.get("isPreOrder") === "on",
+    preOrderClosesAt: formData.get("preOrderClosesAt") || undefined,
+    dropQuantityLimit: formData.get("dropQuantityLimit") || undefined,
     collectionId: formData.get("collectionId") || undefined,
     designId: formData.get("designId") || undefined,
     variants,
@@ -73,8 +77,11 @@ export async function createProduct(formData: FormData) {
       cost: parsed.data.cost,
       careInfo: parsed.data.careInfo,
       images: parsed.data.images,
-      visibility: parsed.data.visibility,
       featured: parsed.data.featured,
+      isPreOrder: parsed.data.isPreOrder,
+      preOrderClosesAt: parsed.data.preOrderClosesAt ? new Date(parsed.data.preOrderClosesAt) : null,
+      dropQuantityLimit: parsed.data.dropQuantityLimit ?? null,
+      dropQuantityRemaining: parsed.data.dropQuantityLimit ?? null,
       collectionId: parsed.data.collectionId || null,
       designId: parsed.data.designId || null,
       variants: {
@@ -98,7 +105,7 @@ export async function createProduct(formData: FormData) {
   });
 
   revalidatePath("/admin/products");
-  revalidatePath("/shop");
+  revalidatePath("/dashboard/products");
   return { ok: true, id: product.id };
 }
 
@@ -110,6 +117,17 @@ export async function updateProduct(productId: string, formData: FormData) {
   }
 
   await prisma.$transaction(async (tx) => {
+    const existingProduct = await tx.product.findUniqueOrThrow({ where: { id: productId } });
+
+    // If a drop limit is newly introduced (wasn't set before), start the
+    // remaining count at that limit. If one already existed, leave it
+    // alone — adjusting it after units have sold is an admin edge case
+    // outside this foundation's scope.
+    const dropQuantityRemaining =
+      existingProduct.dropQuantityLimit === null && parsed.data.dropQuantityLimit !== undefined
+        ? parsed.data.dropQuantityLimit
+        : undefined;
+
     await tx.product.update({
       where: { id: productId },
       data: {
@@ -120,8 +138,11 @@ export async function updateProduct(productId: string, formData: FormData) {
         cost: parsed.data.cost,
         careInfo: parsed.data.careInfo,
         images: parsed.data.images,
-        visibility: parsed.data.visibility,
         featured: parsed.data.featured,
+        isPreOrder: parsed.data.isPreOrder,
+        preOrderClosesAt: parsed.data.preOrderClosesAt ? new Date(parsed.data.preOrderClosesAt) : null,
+        dropQuantityLimit: parsed.data.dropQuantityLimit ?? null,
+        ...(dropQuantityRemaining !== undefined && { dropQuantityRemaining }),
         collectionId: parsed.data.collectionId || null,
         designId: parsed.data.designId || null,
       },
@@ -169,7 +190,7 @@ export async function updateProduct(productId: string, formData: FormData) {
   });
 
   revalidatePath("/admin/products");
-  revalidatePath("/shop");
+  revalidatePath("/dashboard/products");
   return { ok: true };
 }
 
@@ -183,5 +204,5 @@ export async function toggleProductActive(productId: string, isActive: boolean) 
     targetId: productId,
   });
   revalidatePath("/admin/products");
-  revalidatePath("/shop");
+  revalidatePath("/dashboard/products");
 }

@@ -2,42 +2,26 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 
-export type Viewer = { role: string; membershipStatus: string | null } | null;
-
 /**
- * Single source of truth for member-only visibility. Every catalog query in
- * the app must go through this — never hand-roll a `visibility` filter
- * elsewhere, or a page can accidentally leak members-only inventory to the
- * public (or to unverified/suspended members).
+ * Private-platform catalog. Every function here assumes it is only ever
+ * called from within a route already gated by requireMember()/requireAdmin()
+ * — there is no public tier to filter against, so the enforcement point is
+ * the route layout, not this data layer. Do not call these from an
+ * unauthenticated route.
  */
-function canSeeMembersOnly(viewer: Viewer) {
-  if (!viewer) return false;
-  if (viewer.role === "ADMIN") return true;
-  return viewer.membershipStatus === "VERIFIED";
-}
 
-function visibilityFilter(viewer: Viewer): Prisma.ProductWhereInput {
-  if (canSeeMembersOnly(viewer)) return {};
-  return { visibility: "PUBLIC" };
-}
-
-function collectionVisibilityFilter(viewer: Viewer): Prisma.CollectionWhereInput {
-  if (canSeeMembersOnly(viewer)) return {};
-  return { visibility: "PUBLIC" };
-}
-
-export async function getFeaturedProducts(viewer: Viewer, take = 8) {
+export async function getFeaturedProducts(take = 8) {
   return prisma.product.findMany({
-    where: { isActive: true, featured: true, ...visibilityFilter(viewer) },
+    where: { isActive: true, featured: true },
     include: { variants: true, collection: true },
     orderBy: { createdAt: "desc" },
     take,
   });
 }
 
-export async function getLatestProducts(viewer: Viewer, take = 8) {
+export async function getLatestProducts(take = 8) {
   return prisma.product.findMany({
-    where: { isActive: true, ...visibilityFilter(viewer) },
+    where: { isActive: true },
     include: { variants: true, collection: true },
     orderBy: { createdAt: "desc" },
     take,
@@ -54,10 +38,9 @@ export type ShopFilters = {
   sort?: "newest" | "price_asc" | "price_desc";
 };
 
-export async function getShopProducts(viewer: Viewer, filters: ShopFilters) {
+export async function getShopProducts(filters: ShopFilters) {
   const where: Prisma.ProductWhereInput = {
     isActive: true,
-    ...visibilityFilter(viewer),
   };
 
   if (filters.q) {
@@ -89,58 +72,43 @@ export async function getShopProducts(viewer: Viewer, filters: ShopFilters) {
   });
 }
 
-export async function getProductBySlug(viewer: Viewer, slug: string) {
+export async function getProductBySlug(slug: string) {
   const product = await prisma.product.findUnique({
     where: { slug },
     include: { variants: true, collection: true, design: true },
   });
   if (!product || !product.isActive) return null;
-  if (product.visibility === "MEMBERS_ONLY" && !canSeeMembersOnly(viewer)) return null;
   return product;
 }
 
-export async function getRelatedProducts(viewer: Viewer, productId: string, category: string, take = 4) {
+export async function getRelatedProducts(productId: string, category: string, take = 4) {
   return prisma.product.findMany({
     where: {
       id: { not: productId },
       category,
       isActive: true,
-      ...visibilityFilter(viewer),
     },
     include: { variants: true },
     take,
   });
 }
 
-export async function getCollections(viewer: Viewer) {
+export async function getCollections() {
   return prisma.collection.findMany({
-    where: collectionVisibilityFilter(viewer),
     orderBy: { createdAt: "desc" },
     include: { _count: { select: { products: true } } },
   });
 }
 
-export async function getCollectionBySlug(viewer: Viewer, slug: string) {
-  const collection = await prisma.collection.findUnique({
+export async function getCollectionBySlug(slug: string) {
+  return prisma.collection.findUnique({
     where: { slug },
     include: {
       products: {
-        where: { isActive: true, ...visibilityFilter(viewer) },
+        where: { isActive: true },
         include: { variants: true },
       },
     },
-  });
-  if (!collection) return null;
-  if (collection.visibility === "MEMBERS_ONLY" && !canSeeMembersOnly(viewer)) return null;
-  return collection;
-}
-
-export async function getMembersCollectionProducts(viewer: Viewer) {
-  if (!canSeeMembersOnly(viewer)) return [];
-  return prisma.product.findMany({
-    where: { isActive: true, visibility: "MEMBERS_ONLY" },
-    include: { variants: true, collection: true },
-    orderBy: { createdAt: "desc" },
   });
 }
 

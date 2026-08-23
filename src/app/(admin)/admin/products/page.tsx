@@ -29,7 +29,7 @@ export default async function AdminProductsPage() {
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Price</th>
               <th className="px-4 py-3">Stock</th>
-              <th className="px-4 py-3">Visibility</th>
+              <th className="px-4 py-3">Drop</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3" />
             </tr>
@@ -48,10 +48,12 @@ export default async function AdminProductsPage() {
                   <td className="px-4 py-3 capitalize text-ink/70">{p.category}</td>
                   <td className="px-4 py-3">{formatNaira(p.price)}</td>
                   <td className="px-4 py-3">{stock}</td>
-                  <td className="px-4 py-3">
-                    <span className={p.visibility === "MEMBERS_ONLY" ? "text-gold" : "text-ink/60"}>
-                      {p.visibility === "MEMBERS_ONLY" ? "Members" : "Public"}
-                    </span>
+                  <td className="px-4 py-3 text-ink/60">
+                    {p.dropQuantityLimit !== null
+                      ? `${p.dropQuantityRemaining}/${p.dropQuantityLimit}`
+                      : p.isPreOrder
+                        ? "Pre-order"
+                        : "—"}
                   </td>
                   <td className="px-4 py-3">
                     <ProductActiveToggle productId={p.id} isActive={p.isActive} />

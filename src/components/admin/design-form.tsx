@@ -75,20 +75,13 @@ export function DesignForm({ collections }: { collections: { id: string; name: s
         </div>
         <input ref={fileInput} type="file" accept="image/*" onChange={handleFile} className="hidden" />
       </div>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Status</label>
           <select name="status" defaultValue="DRAFT" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm">
             <option value="DRAFT">Draft</option>
             <option value="PUBLISHED">Published</option>
             <option value="ARCHIVED">Archived</option>
-          </select>
-        </div>
-        <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Visibility</label>
-          <select name="visibility" defaultValue="PUBLIC" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm">
-            <option value="PUBLIC">Public</option>
-            <option value="MEMBERS_ONLY">Members Only</option>
           </select>
         </div>
         <div>

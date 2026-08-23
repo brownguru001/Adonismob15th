@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UploadCloud, X } from "lucide-react";
-import { submitCustomOrder } from "@/app/(site)/custom-orders/actions";
+import { submitCustomOrder } from "@/app/(member)/dashboard/custom-orders/actions";
 
 export function CustomOrderForm() {
   const [images, setImages] = useState<string[]>([]);
@@ -46,7 +46,7 @@ export function CustomOrderForm() {
             return;
           }
           toast.success("Custom order request submitted");
-          router.push(`/custom-orders/${result.id}`);
+          router.push(`/dashboard/custom-orders/${result.id}`);
         });
       }}
       className="space-y-5"

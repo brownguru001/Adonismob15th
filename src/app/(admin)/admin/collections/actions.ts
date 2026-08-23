@@ -11,7 +11,6 @@ const collectionSchema = z.object({
   name: z.string().min(1).max(150),
   description: z.string().max(2000).optional(),
   coverImage: z.string().url().optional(),
-  visibility: z.enum(["PUBLIC", "MEMBERS_ONLY"]),
   featured: z.coerce.boolean().default(false),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
@@ -23,7 +22,6 @@ export async function createCollection(formData: FormData) {
     name: formData.get("name"),
     description: formData.get("description") || undefined,
     coverImage: formData.get("coverImage") || undefined,
-    visibility: formData.get("visibility"),
     featured: formData.get("featured") === "on",
     startDate: formData.get("startDate") || undefined,
     endDate: formData.get("endDate") || undefined,
@@ -46,7 +44,6 @@ export async function createCollection(formData: FormData) {
       slug,
       description: parsed.data.description,
       coverImage: parsed.data.coverImage,
-      visibility: parsed.data.visibility,
       featured: parsed.data.featured,
       startDate: parsed.data.startDate ? new Date(parsed.data.startDate) : null,
       endDate: parsed.data.endDate ? new Date(parsed.data.endDate) : null,
@@ -61,6 +58,6 @@ export async function createCollection(formData: FormData) {
   });
 
   revalidatePath("/admin/collections");
-  revalidatePath("/collections");
+  revalidatePath("/dashboard/collections");
   return { ok: true, id: collection.id };
 }
