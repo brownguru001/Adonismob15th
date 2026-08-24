@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Fraunces } from "next/font/google";
+import { Libre_Franklin, Cinzel } from "next/font/google";
 import { Toaster } from "sonner";
 import { CartProvider } from "@/components/cart-context";
 import "./globals.css";
 
-const sans = Bricolage_Grotesque({
+const sans = Libre_Franklin({
   variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const display = Fraunces({
+const display = Cinzel({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["500", "600", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -31,8 +31,9 @@ export const metadata: Metadata = {
     type: "website",
   },
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
+    nocache: true,
   },
 };
 

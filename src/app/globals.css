@@ -2,12 +2,12 @@
 
 :root {
   --color-ink: #0a0a0a;
-  --color-ink-soft: #171412;
-  --color-bone: #f6f3ee;
-  --color-bone-dim: #e9e3d8;
-  --color-gold: #c8952c;
-  --color-gold-soft: #e3bd6c;
-  --color-clay: #a9502f;
+  --color-ink-soft: #1a1512;
+  --color-bone: #f1e9d8;
+  --color-bone-dim: #e3d6b8;
+  --color-gold: #ab7d2c;
+  --color-gold-soft: #cba455;
+  --color-clay: #5c0f16;
 }
 
 @theme inline {
@@ -23,13 +23,16 @@
 }
 
 body {
-  background: var(--color-bone);
+  background:
+    radial-gradient(ellipse 140% 90% at 50% -10%, transparent 45%, rgba(10, 10, 10, 0.35) 100%),
+    var(--color-bone);
   color: var(--color-ink);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 .font-display {
   font-family: var(--font-display), ui-serif, Georgia, serif;
+  letter-spacing: 0.02em;
 }
 
 .text-balance {
