@@ -1,3 +1,5 @@
+import { PasswordChangeForm } from "@/components/password-change-form";
+
 function EnvStatus({ label, isSet }: { label: string; isSet: boolean }) {
   return (
     <div className="flex items-center justify-between border-b border-ink/5 py-3 text-sm last:border-0">
@@ -37,6 +39,16 @@ export default function AdminSettingsPage() {
         <p className="font-semibold text-ink">Business info</p>
         <p className="mt-2">ADONISMOB15TH &middot; Lagos, Nigeria</p>
         <p>hello@adonismob15th.com</p>
+      </div>
+
+      <div className="mt-6 rounded-xl border border-ink/10 bg-white p-6">
+        <p className="font-semibold text-ink">Change password</p>
+        <p className="mt-1 text-sm text-ink/50">
+          Update your own admin login credential.
+        </p>
+        <div className="mt-4">
+          <PasswordChangeForm />
+        </div>
       </div>
     </div>
   );

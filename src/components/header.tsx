@@ -43,7 +43,7 @@ export async function Header() {
                 Admin
               </Link>
             )}
-            <Link href="/dashboard" className="text-sm font-medium text-ink/70 hover:text-ink">
+            <Link href="/dashboard/account" className="text-sm font-medium text-ink/70 hover:text-ink">
               Account
             </Link>
             <form

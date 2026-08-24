@@ -41,7 +41,7 @@ export function Menu({
                   Admin
                 </Link>
               )}
-              <Link href="/dashboard" onClick={() => setOpen(false)} className="block py-1 text-ink/80">
+              <Link href="/dashboard/account" onClick={() => setOpen(false)} className="block py-1 text-ink/80">
                 Account
               </Link>
             </div>

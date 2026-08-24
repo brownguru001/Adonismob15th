@@ -39,6 +39,16 @@ export default async function DashboardPage() {
           </span>
         </p>
       </div>
+
+      <Link
+        href="/dashboard/account"
+        className="mt-4 block rounded-xl border border-ink/10 p-6 hover:border-ink/30"
+      >
+        <p className="text-sm font-semibold uppercase tracking-wide text-ink/50">
+          Account
+        </p>
+        <p className="mt-2 text-sm text-ink/70">Change your password</p>
+      </Link>
     </div>
   );
 }

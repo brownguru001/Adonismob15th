@@ -53,6 +53,11 @@ npm run dev
 A pending invitation is also seeded — visit `/invite/seed-demo-invite` to
 walk through account creation the way a real invitee would.
 
+**These are demo credentials for local development only.** On any
+deployment reachable from the internet, sign in and immediately change the
+admin password from `/admin/settings` (or a member's password from
+`/dashboard/account`) — do not leave the seeded password in place.
+
 All seeded data is clearly synthetic — see `prisma/seed.ts`. Nothing in the
 admin dashboard is fabricated at runtime; analytics are computed live from
 whatever is actually in the database.
