@@ -42,7 +42,7 @@ export async function submitCheckout(
   const hdrs = await headers();
   const proto = hdrs.get("x-forwarded-proto") ?? "http";
   const host = hdrs.get("host");
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? `${proto}://${host}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`;
 
   try {
     const { order, paymentLink, paymentError } = await createOrderFromCart({
