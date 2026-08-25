@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/authz";
 import { signOut } from "@/lib/auth";
+import { AdminMobileMenu } from "@/components/admin/admin-mobile-menu";
 
 const navGroups = [
   {
@@ -45,8 +46,14 @@ const navGroups = [
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await requireAdmin();
 
+  async function handleSignOut() {
+    "use server";
+    await signOut({ redirectTo: "/" });
+  }
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row">
+      <AdminMobileMenu navGroups={navGroups} email={user.email ?? ""} onSignOut={handleSignOut} />
       <aside className="hidden w-64 shrink-0 flex-col border-r border-gold/10 bg-ink-soft text-bone md:flex">
         <div className="px-6 py-6">
           <Link href="/admin" className="font-display text-lg font-semibold">
@@ -80,12 +87,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/dashboard" className="text-bone/50 hover:text-bone">
               View site
             </Link>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
+            <form action={handleSignOut}>
               <button className="text-bone/50 hover:text-bone">Sign out</button>
             </form>
           </div>
