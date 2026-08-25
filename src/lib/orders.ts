@@ -6,6 +6,7 @@ import { initiatePayment } from "@/lib/flutterwave";
 const SHIPPING_FEE = 2500;
 
 export type CartLineInput = { variantId: string; quantity: number };
+export type PaymentMethod = "FLUTTERWAVE" | "BANK_TRANSFER";
 
 export class OrderValidationError extends Error {}
 
@@ -30,6 +31,7 @@ export async function createOrderFromCart(params: {
   };
   items: CartLineInput[];
   appUrl: string;
+  paymentMethod: PaymentMethod;
 }) {
   if (params.items.length === 0) {
     throw new OrderValidationError("Cart is empty.");
@@ -137,27 +139,34 @@ export async function createOrderFromCart(params: {
       txRef,
       amount: total,
       status: "PENDING",
+      provider: params.paymentMethod,
     },
   });
 
   let paymentLink: string | null = null;
   let paymentError: string | null = null;
-  try {
-    const initResult = await initiatePayment({
-      txRef,
-      amount: total,
-      customerEmail: params.customerEmail,
-      customerName: params.customerName,
-      customerPhone: params.customerPhone,
-      redirectUrl: `${params.appUrl}/api/payments/callback`,
-      title: `ADONISMOB15TH order ${order.orderNumber}`,
-    });
-    paymentLink = initResult.data?.link ?? null;
-  } catch (err) {
-    paymentError =
-      err instanceof Error
-        ? err.message
-        : "Payment provider is not configured in this environment.";
+
+  // Bank transfer needs no provider round-trip — the order/payment row
+  // already exists as PENDING, and the order page takes it from there
+  // (instructions + a customer "I've paid" action, then admin confirms).
+  if (params.paymentMethod === "FLUTTERWAVE") {
+    try {
+      const initResult = await initiatePayment({
+        txRef,
+        amount: total,
+        customerEmail: params.customerEmail,
+        customerName: params.customerName,
+        customerPhone: params.customerPhone,
+        redirectUrl: `${params.appUrl}/api/payments/callback`,
+        title: `ADONISMOB15TH order ${order.orderNumber}`,
+      });
+      paymentLink = initResult.data?.link ?? null;
+    } catch (err) {
+      paymentError =
+        err instanceof Error
+          ? err.message
+          : "Payment provider is not configured in this environment.";
+    }
   }
 
   return { order, paymentLink, paymentError };

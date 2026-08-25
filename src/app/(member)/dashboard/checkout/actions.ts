@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { headers } from "next/headers";
 import { requireMember } from "@/lib/authz";
-import { createOrderFromCart, OrderValidationError, type CartLineInput } from "@/lib/orders";
+import { createOrderFromCart, OrderValidationError, type CartLineInput, type PaymentMethod } from "@/lib/orders";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 const checkoutSchema = z.object({
@@ -14,13 +14,23 @@ const checkoutSchema = z.object({
   line2: z.string().max(200).optional(),
   city: z.string().min(2).max(100),
   state: z.string().min(2).max(100),
+  paymentMethod: z.enum(["FLUTTERWAVE", "BANK_TRANSFER"]).default("FLUTTERWAVE"),
 });
 
 export async function submitCheckout(
   items: CartLineInput[],
   formData: FormData
-): Promise<{ ok: true; paymentLink: string | null; orderNumber: string; paymentError: string | null } | { ok: false; error: string }> {
+): Promise<
+  | { ok: true; paymentLink: string | null; orderNumber: string; paymentError: string | null; paymentMethod: PaymentMethod }
+  | { ok: false; error: string }
+> {
   const user = await requireMember();
+
+  // The storefront is for customers; admin activity here would mix into
+  // real order data and analytics.
+  if (user.role === "ADMIN") {
+    return { ok: false, error: "Admin accounts can't place customer orders." };
+  }
 
   const limited = checkRateLimit(`checkout:${user.id}`, 10, 15 * 60 * 1000);
   if (!limited.ok) return { ok: false, error: limited.error };
@@ -33,6 +43,7 @@ export async function submitCheckout(
     line2: formData.get("line2") || undefined,
     city: formData.get("city"),
     state: formData.get("state"),
+    paymentMethod: formData.get("paymentMethod") || undefined,
   });
 
   if (!parsed.success) {
@@ -53,9 +64,10 @@ export async function submitCheckout(
       address: parsed.data,
       items,
       appUrl,
+      paymentMethod: parsed.data.paymentMethod,
     });
 
-    return { ok: true, paymentLink, orderNumber: order.orderNumber, paymentError };
+    return { ok: true, paymentLink, orderNumber: order.orderNumber, paymentError, paymentMethod: parsed.data.paymentMethod };
   } catch (err) {
     if (err instanceof OrderValidationError) {
       return { ok: false, error: err.message };

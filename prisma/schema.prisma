@@ -51,6 +51,7 @@ enum OrderStatus {
 
 enum PaymentStatus {
   PENDING
+  AWAITING_VERIFICATION
   SUCCESSFUL
   FAILED
   CANCELLED
@@ -59,6 +60,7 @@ enum PaymentStatus {
 
 enum PaymentProvider {
   FLUTTERWAVE
+  BANK_TRANSFER
 }
 
 enum CustomOrderStatus {

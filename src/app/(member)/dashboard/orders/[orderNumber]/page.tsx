@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireMember } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { formatNaira } from "@/lib/utils";
+import { BankTransferClaimButton } from "@/components/bank-transfer-claim-button";
 
 export default async function OrderDetailPage({
   params,
@@ -18,11 +19,14 @@ export default async function OrderDetailPage({
       statusEvents: { orderBy: { createdAt: "asc" } },
       address: true,
       productionOrder: true,
+      payments: true,
     },
   });
 
   // IDOR guard: an order number alone must never expose someone else's order.
   if (!order || (order.userId !== user.id && user.role !== "ADMIN")) notFound();
+
+  const bankTransfer = order.payments.find((p) => p.provider === "BANK_TRANSFER");
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
@@ -31,6 +35,41 @@ export default async function OrderDetailPage({
       <p className="mt-1 text-sm text-bone/60">
         Placed {new Date(order.createdAt).toLocaleDateString()}
       </p>
+
+      {bankTransfer && bankTransfer.status === "PENDING" && (
+        <div className="mt-6 rounded-xl border border-gold/30 bg-gold/10 p-6 text-sm">
+          <p className="font-semibold text-bone">Pay by bank transfer</p>
+          {process.env.BANK_ACCOUNT_NUMBER ? (
+            <>
+              <p className="mt-2 text-bone/70">
+                Transfer <span className="font-semibold text-bone">{formatNaira(order.total)}</span> to:
+              </p>
+              <div className="mt-3 space-y-1 text-bone">
+                <p>{process.env.BANK_NAME}</p>
+                <p className="font-mono">{process.env.BANK_ACCOUNT_NUMBER}</p>
+                <p>{process.env.BANK_ACCOUNT_NAME}</p>
+              </div>
+              <p className="mt-3 text-xs text-bone/50">
+                Please include <span className="font-mono">{order.orderNumber}</span> as your transfer reference.
+              </p>
+            </>
+          ) : (
+            <p className="mt-2 text-bone/70">
+              Bank details aren&apos;t set up yet — contact us directly to arrange payment for this order.
+            </p>
+          )}
+          <BankTransferClaimButton orderId={order.id} />
+        </div>
+      )}
+
+      {bankTransfer && bankTransfer.status === "AWAITING_VERIFICATION" && (
+        <div className="mt-6 rounded-xl border border-bone/10 bg-ink-soft p-6 text-sm text-bone/70">
+          <p className="font-semibold text-bone">Payment reported — awaiting confirmation</p>
+          <p className="mt-1">
+            We&apos;ll update this order to Paid once we&apos;ve confirmed the transfer landed.
+          </p>
+        </div>
+      )}
 
       <div className="mt-8 rounded-xl border border-bone/10 p-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-bone/50">Timeline</p>

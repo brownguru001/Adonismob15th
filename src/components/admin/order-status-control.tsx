@@ -14,6 +14,7 @@ export function OrderStatusControl({ orderId, status }: { orderId: string; statu
 
   return (
     <select
+      key={status}
       defaultValue={status}
       disabled={isPending}
       onChange={(e) =>

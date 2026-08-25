@@ -18,6 +18,7 @@ export default function AdminSettingsPage() {
     { label: "Flutterwave secret key", isSet: !!process.env.FLUTTERWAVE_SECRET_KEY },
     { label: "Flutterwave public key", isSet: !!process.env.FLUTTERWAVE_PUBLIC_KEY },
     { label: "Flutterwave webhook secret hash", isSet: !!process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH },
+    { label: "Bank transfer details", isSet: !!process.env.BANK_ACCOUNT_NUMBER },
     { label: "File uploads (Blob storage)", isSet: !!process.env.BLOB_READ_WRITE_TOKEN },
   ];
 

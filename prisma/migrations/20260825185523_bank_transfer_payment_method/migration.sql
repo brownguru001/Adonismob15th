@@ -1,0 +1,6 @@
+-- AlterEnum
+ALTER TYPE "PaymentProvider" ADD VALUE 'BANK_TRANSFER';
+
+-- AlterEnum
+ALTER TYPE "PaymentStatus" ADD VALUE 'AWAITING_VERIFICATION';
+

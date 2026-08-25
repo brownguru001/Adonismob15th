@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { formatNaira } from "@/lib/utils";
 import { OrderStatusControl } from "@/components/admin/order-status-control";
 import { ProductionForm } from "@/components/admin/production-form";
+import { BankTransferControl } from "@/components/admin/bank-transfer-control";
 
 export default async function AdminOrderDetailPage({
   params,
@@ -69,6 +70,10 @@ export default async function AdminOrderDetailPage({
             ))}
             {order.payments.length === 0 && <p className="text-bone/40">No payments recorded.</p>}
           </div>
+
+          {order.payments.some((p) => p.provider === "BANK_TRANSFER" && p.status === "AWAITING_VERIFICATION") && (
+            <BankTransferControl orderId={order.id} />
+          )}
 
           {order.address && (
             <>

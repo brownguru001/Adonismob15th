@@ -42,6 +42,92 @@ export async function updateOrderStatus(orderId: string, status: (typeof ORDER_S
   return { ok: true };
 }
 
+export async function confirmBankTransfer(orderId: string) {
+  const admin = await requireAdmin();
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { payments: true, items: true },
+  });
+  if (!order) return { ok: false, error: "Order not found." };
+
+  const payment = order.payments.find((p) => p.provider === "BANK_TRANSFER");
+  if (!payment || payment.status !== "AWAITING_VERIFICATION") {
+    return { ok: false, error: "This order has no bank transfer awaiting confirmation." };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.payment.update({
+      where: { id: payment.id },
+      data: { status: "SUCCESSFUL", verifiedAt: new Date() },
+    });
+    await tx.order.update({ where: { id: order.id }, data: { status: "PAID" } });
+    await tx.orderStatusEvent.create({
+      data: { orderId: order.id, status: "PAID", note: "Bank transfer confirmed by admin." },
+    });
+    await tx.productionOrder.upsert({
+      where: { orderId: order.id },
+      create: { orderId: order.id, stage: "QUEUED" },
+      update: {},
+    });
+  });
+
+  await logAdminAction({
+    actorId: admin.id,
+    action: "order.bank_transfer_confirmed",
+    targetType: "Order",
+    targetId: orderId,
+  });
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  revalidatePath("/admin/orders");
+  return { ok: true };
+}
+
+export async function rejectBankTransfer(orderId: string) {
+  const admin = await requireAdmin();
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { payments: true, items: true },
+  });
+  if (!order) return { ok: false, error: "Order not found." };
+
+  const payment = order.payments.find((p) => p.provider === "BANK_TRANSFER");
+  if (!payment || payment.status !== "AWAITING_VERIFICATION") {
+    return { ok: false, error: "This order has no bank transfer awaiting confirmation." };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.payment.update({ where: { id: payment.id }, data: { status: "FAILED" } });
+    await tx.order.update({ where: { id: order.id }, data: { status: "CANCELLED" } });
+    await tx.orderStatusEvent.create({
+      data: {
+        orderId: order.id,
+        status: "CANCELLED",
+        note: "Bank transfer could not be confirmed by admin — order cancelled.",
+      },
+    });
+    for (const item of order.items) {
+      await tx.productVariant.update({
+        where: { id: item.variantId },
+        data: { stock: { increment: item.quantity } },
+      });
+    }
+  });
+
+  await logAdminAction({
+    actorId: admin.id,
+    action: "order.bank_transfer_rejected",
+    targetType: "Order",
+    targetId: orderId,
+  });
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  revalidatePath("/admin/orders");
+  return { ok: true };
+}
+
 const PRODUCTION_STAGES = [
   "QUEUED",
   "ASSIGNED",
