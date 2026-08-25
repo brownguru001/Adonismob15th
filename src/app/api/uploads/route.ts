@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 import { auth } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 
@@ -12,7 +11,6 @@ const ALLOWED_TYPES: Record<string, string> = {
   "image/gif": "gif",
 };
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "custom-orders");
 
 // Magic-byte checks so a file can't get through just by lying about its
 // browser-reported Content-Type — the client's `file.type` is otherwise
@@ -25,10 +23,12 @@ const SIGNATURES: Record<string, (buf: Buffer) => boolean> = {
   "image/webp": (buf) => buf.toString("ascii", 0, 4) === "RIFF" && buf.toString("ascii", 8, 12) === "WEBP",
 };
 
-// Authenticated-only, allowlisted-mimetype upload used for custom-order
-// reference artwork. Demo-grade: writes to local disk. In production this
-// should be swapped for S3/Cloudinary — local disk doesn't survive
-// stateless/serverless deploys.
+// Authenticated-only, allowlisted-mimetype upload used for design/product
+// artwork and custom-order reference images. Stored in Vercel Blob (not
+// local disk) since Vercel's serverless functions don't have persistent
+// filesystem storage — anything written to disk here would vanish on the
+// next invocation or deploy. Requires BLOB_READ_WRITE_TOKEN, which Vercel
+// injects automatically once Blob storage is enabled on the project.
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user) {
@@ -60,9 +60,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "File content doesn't match its declared type" }, { status: 400 });
   }
 
-  await mkdir(UPLOAD_DIR, { recursive: true });
-  const filename = `${randomUUID()}.${ext}`;
-  await writeFile(path.join(UPLOAD_DIR, filename), buffer);
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return NextResponse.json(
+      { error: "File storage isn't configured on this deployment yet." },
+      { status: 503 }
+    );
+  }
 
-  return NextResponse.json({ url: `/uploads/custom-orders/${filename}` });
+  const filename = `${randomUUID()}.${ext}`;
+  const blob = await put(filename, buffer, {
+    access: "public",
+    contentType: file.type,
+  });
+
+  return NextResponse.json({ url: blob.url });
 }
