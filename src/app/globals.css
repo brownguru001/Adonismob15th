@@ -8,6 +8,7 @@
   --color-gold: #ab7d2c;
   --color-gold-soft: #cba455;
   --color-clay: #5c0f16;
+  --color-rose: #b3182f;
 }
 
 @theme inline {
@@ -18,11 +19,13 @@
   --color-gold: var(--color-gold);
   --color-gold-soft: var(--color-gold-soft);
   --color-clay: var(--color-clay);
+  --color-rose: var(--color-rose);
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
 }
 
 body {
+  position: relative;
   background:
     radial-gradient(ellipse 120% 60% at 50% 0%, rgba(171, 125, 44, 0.08), transparent 60%),
     var(--color-ink);

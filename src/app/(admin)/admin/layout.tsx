@@ -46,7 +46,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const user = await requireAdmin();
 
   return (
-    <div className="flex min-h-screen bg-ink">
+    <div className="flex min-h-screen">
       <aside className="hidden w-64 shrink-0 flex-col border-r border-gold/10 bg-ink-soft text-bone md:flex">
         <div className="px-6 py-6">
           <Link href="/admin" className="font-display text-lg font-semibold">

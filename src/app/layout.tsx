@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Libre_Franklin, Cinzel } from "next/font/google";
 import { Toaster } from "sonner";
 import { CartProvider } from "@/components/cart-context";
+import { RoseBackdrop } from "@/components/rose-backdrop";
 import "./globals.css";
 
 const sans = Libre_Franklin({
@@ -43,7 +44,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${sans.variable} ${display.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-bone text-ink">
+      <body className="min-h-full flex flex-col bg-ink text-bone">
+        <RoseBackdrop />
         <CartProvider>
           {children}
           <Toaster position="top-center" richColors />

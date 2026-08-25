@@ -1,9 +1,16 @@
-export function RoseMotif({ className }: { className?: string }) {
+export function RoseMotif({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <svg
       viewBox="0 0 420 820"
       fill="none"
       className={className}
+      style={style}
       aria-hidden="true"
     >
       {/* stem */}
