@@ -47,3 +47,25 @@ export function checkRateLimit(key: string, limit: number, windowMs: number): Ra
   bucket.count += 1;
   return { ok: true };
 }
+
+/**
+ * Read-only check — does not consume a slot. Use this to block an attempt
+ * before it happens, then call `recordFailedAttempt` only if it actually
+ * fails, so legitimate successes (e.g. a correct password) never count
+ * against the limit the way `checkRateLimit` would.
+ */
+export function isRateLimited(key: string, limit: number): boolean {
+  const bucket = buckets.get(key);
+  if (!bucket || bucket.resetAt < Date.now()) return false;
+  return bucket.count >= limit;
+}
+
+export function recordFailedAttempt(key: string, windowMs: number): void {
+  const now = Date.now();
+  const bucket = buckets.get(key);
+  if (!bucket || bucket.resetAt < now) {
+    buckets.set(key, { count: 1, resetAt: now + windowMs });
+    return;
+  }
+  bucket.count += 1;
+}

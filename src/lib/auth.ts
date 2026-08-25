@@ -4,7 +4,9 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  session: { strategy: "jwt" },
+  // 30 days matches Auth.js's own default — made explicit so it's a
+  // deliberate choice for a private membership site, not an implicit one.
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   // Required for self-hosted deployments behind a reverse proxy/load balancer
   // (Docker, VPS, etc.) where Auth.js can't otherwise verify the Host header
   // against a known deployment URL the way it can on Vercel.

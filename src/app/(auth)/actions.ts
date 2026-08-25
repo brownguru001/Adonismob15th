@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { checkRateLimit, isRateLimited, recordFailedAttempt, getClientIp } from "@/lib/rate-limit";
 
 const redeemSchema = z.object({
   code: z.string().min(1),
@@ -73,15 +73,26 @@ export async function redeemInvitation(
   return { ok: true, email };
 }
 
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+
 export async function loginCustomer(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const emailKey = `login-email:${email.toLowerCase()}`;
 
   const ip = await getClientIp();
-  const ipLimited = checkRateLimit(`login-ip:${ip}`, 20, 15 * 60 * 1000);
-  if (!ipLimited.ok) return { ok: false, error: ipLimited.error };
-  const emailLimited = checkRateLimit(`login-email:${email.toLowerCase()}`, 5, 15 * 60 * 1000);
-  if (!emailLimited.ok) return { ok: false, error: "Too many failed attempts for this account. Please wait a few minutes." };
+  const ipKey = `login-ip:${ip}`;
+
+  // Peek rather than consume-and-check — a run of correct passwords (e.g.
+  // someone genuinely re-authenticating several times) must never count
+  // toward a limit meant to slow down guessing. Only a failed attempt below
+  // actually records against either bucket.
+  if (isRateLimited(ipKey, 20)) {
+    return { ok: false, error: "Too many requests. Please wait a moment and try again." };
+  }
+  if (isRateLimited(emailKey, 5)) {
+    return { ok: false, error: "Too many failed attempts for this account. Please wait a few minutes." };
+  }
 
   try {
     await signIn("credentials", {
@@ -92,6 +103,8 @@ export async function loginCustomer(formData: FormData) {
     return { ok: true };
   } catch (error) {
     if (error instanceof AuthError) {
+      recordFailedAttempt(ipKey, LOGIN_WINDOW_MS);
+      recordFailedAttempt(emailKey, LOGIN_WINDOW_MS);
       return { ok: false, error: "Invalid email or password." };
     }
     throw error;
