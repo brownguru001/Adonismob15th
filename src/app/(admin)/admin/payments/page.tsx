@@ -3,11 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { formatNaira } from "@/lib/utils";
 
 const STATUS_COLOR: Record<string, string> = {
-  PENDING: "bg-bone-dim text-ink/60",
+  PENDING: "bg-ink-soft text-bone/60",
   SUCCESSFUL: "bg-green-100 text-green-700",
   FAILED: "bg-red-100 text-red-700",
   CANCELLED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-ink/10 text-ink/60",
+  REFUNDED: "bg-bone/10 text-bone/60",
 };
 
 export default async function AdminPaymentsPage() {
@@ -20,13 +20,13 @@ export default async function AdminPaymentsPage() {
   return (
     <div>
       <h1 className="font-display text-2xl font-semibold">Payments</h1>
-      <p className="mt-1 text-sm text-ink/50">
+      <p className="mt-1 text-sm text-bone/50">
         Every payment is verified server-side against Flutterwave before an order is marked paid.
       </p>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-ink/10 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-bone/10 bg-ink-soft">
         <table className="w-full text-sm">
-          <thead className="border-b border-ink/10 text-left text-xs uppercase tracking-wide text-ink/40">
+          <thead className="border-b border-bone/10 text-left text-xs uppercase tracking-wide text-bone/40">
             <tr>
               <th className="px-4 py-3">Reference</th>
               <th className="px-4 py-3">Order</th>
@@ -39,23 +39,23 @@ export default async function AdminPaymentsPage() {
           <tbody className="divide-y divide-ink/5">
             {payments.map((p) => (
               <tr key={p.id}>
-                <td className="px-4 py-3 font-mono text-xs text-ink/60">{p.txRef}</td>
+                <td className="px-4 py-3 font-mono text-xs text-bone/60">{p.txRef}</td>
                 <td className="px-4 py-3">
                   <Link href={`/admin/orders/${p.orderId}`} className="hover:text-gold">
                     {p.order.orderNumber}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-ink/70">{p.order.user.name}</td>
+                <td className="px-4 py-3 text-bone/70">{p.order.user.name}</td>
                 <td className="px-4 py-3">{formatNaira(p.amount)}</td>
                 <td className="px-4 py-3">
                   <span className={`rounded-full px-2.5 py-1 text-xs ${STATUS_COLOR[p.status]}`}>{p.status}</span>
                 </td>
-                <td className="px-4 py-3 text-ink/50">{new Date(p.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-bone/50">{new Date(p.createdAt).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {payments.length === 0 && <p className="p-8 text-center text-ink/40">No payments yet.</p>}
+        {payments.length === 0 && <p className="p-8 text-center text-bone/40">No payments yet.</p>}
       </div>
     </div>
   );

@@ -34,31 +34,31 @@ export function CustomOrderControl({
       className="space-y-3"
     >
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Status</label>
-        <select name="status" defaultValue={status} className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm">
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Status</label>
+        <select name="status" defaultValue={status} className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm">
           {STATUSES.map((s) => (
             <option key={s} value={s}>{s.replace(/_/g, " ")}</option>
           ))}
         </select>
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Quoted price (NGN)</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Quoted price (NGN)</label>
         <input
           name="quotedPrice"
           type="number"
           min={0}
           step="0.01"
           defaultValue={quotedPrice ?? ""}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         />
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Admin notes</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Admin notes</label>
         <textarea
           name="adminNotes"
           defaultValue={adminNotes ?? ""}
           rows={3}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         />
       </div>
       <button

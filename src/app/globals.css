@@ -24,9 +24,10 @@
 
 body {
   background:
-    radial-gradient(ellipse 140% 90% at 50% -10%, transparent 45%, rgba(10, 10, 10, 0.35) 100%),
-    var(--color-bone);
-  color: var(--color-ink);
+    radial-gradient(ellipse 120% 60% at 50% 0%, rgba(171, 125, 44, 0.08), transparent 60%),
+    var(--color-ink);
+  background-attachment: fixed;
+  color: var(--color-bone);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 

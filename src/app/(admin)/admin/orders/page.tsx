@@ -25,23 +25,23 @@ export default async function AdminOrdersPage({
       <h1 className="font-display text-2xl font-semibold">Orders</h1>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <Link href="/admin/orders" className={`rounded-full border px-3 py-1 text-xs ${!status ? "border-ink bg-ink text-bone" : "border-ink/20 text-ink/60"}`}>
+        <Link href="/admin/orders" className={`rounded-full border px-3 py-1 text-xs ${!status ? "border-gold bg-gold text-ink" : "border-bone/20 text-bone/60"}`}>
           All
         </Link>
         {statuses.map((s) => (
           <Link
             key={s}
             href={`/admin/orders?status=${s}`}
-            className={`rounded-full border px-3 py-1 text-xs ${status === s ? "border-ink bg-ink text-bone" : "border-ink/20 text-ink/60"}`}
+            className={`rounded-full border px-3 py-1 text-xs ${status === s ? "border-gold bg-gold text-ink" : "border-bone/20 text-bone/60"}`}
           >
             {s.replace("_", " ")}
           </Link>
         ))}
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-ink/10 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-bone/10 bg-ink-soft">
         <table className="w-full text-sm">
-          <thead className="border-b border-ink/10 text-left text-xs uppercase tracking-wide text-ink/40">
+          <thead className="border-b border-bone/10 text-left text-xs uppercase tracking-wide text-bone/40">
             <tr>
               <th className="px-4 py-3">Order</th>
               <th className="px-4 py-3">Customer</th>
@@ -59,16 +59,16 @@ export default async function AdminOrdersPage({
                     {order.orderNumber}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-ink/70">{order.user.name}</td>
-                <td className="px-4 py-3 text-ink/70">{order.items.length}</td>
+                <td className="px-4 py-3 text-bone/70">{order.user.name}</td>
+                <td className="px-4 py-3 text-bone/70">{order.items.length}</td>
                 <td className="px-4 py-3">{formatNaira(order.total)}</td>
-                <td className="px-4 py-3 text-ink/70">{order.status.replace("_", " ")}</td>
-                <td className="px-4 py-3 text-ink/50">{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-bone/70">{order.status.replace("_", " ")}</td>
+                <td className="px-4 py-3 text-bone/50">{new Date(order.createdAt).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {orders.length === 0 && <p className="p-8 text-center text-ink/40">No orders found.</p>}
+        {orders.length === 0 && <p className="p-8 text-center text-bone/40">No orders found.</p>}
       </div>
     </div>
   );

@@ -21,9 +21,9 @@ export default async function AdminProductsPage() {
         </Link>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-ink/10 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-bone/10 bg-ink-soft">
         <table className="w-full text-sm">
-          <thead className="border-b border-ink/10 text-left text-xs uppercase tracking-wide text-ink/40">
+          <thead className="border-b border-bone/10 text-left text-xs uppercase tracking-wide text-bone/40">
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Category</th>
@@ -45,10 +45,10 @@ export default async function AdminProductsPage() {
                     </Link>
                     {p.featured && <span className="ml-2 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] text-gold">Featured</span>}
                   </td>
-                  <td className="px-4 py-3 capitalize text-ink/70">{p.category}</td>
+                  <td className="px-4 py-3 capitalize text-bone/70">{p.category}</td>
                   <td className="px-4 py-3">{formatNaira(p.price)}</td>
                   <td className="px-4 py-3">{stock}</td>
-                  <td className="px-4 py-3 text-ink/60">
+                  <td className="px-4 py-3 text-bone/60">
                     {p.dropQuantityLimit !== null
                       ? `${p.dropQuantityRemaining}/${p.dropQuantityLimit}`
                       : p.isPreOrder
@@ -59,7 +59,7 @@ export default async function AdminProductsPage() {
                     <ProductActiveToggle productId={p.id} isActive={p.isActive} />
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Link href={`/admin/products/${p.id}`} className="text-xs text-ink/50 hover:text-ink">
+                    <Link href={`/admin/products/${p.id}`} className="text-xs text-bone/50 hover:text-bone">
                       Edit
                     </Link>
                   </td>
@@ -68,7 +68,7 @@ export default async function AdminProductsPage() {
             })}
           </tbody>
         </table>
-        {products.length === 0 && <p className="p-8 text-center text-ink/40">No products yet.</p>}
+        {products.length === 0 && <p className="p-8 text-center text-bone/40">No products yet.</p>}
       </div>
     </div>
   );

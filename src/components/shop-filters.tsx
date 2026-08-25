@@ -41,26 +41,26 @@ export function ShopFiltersBar({
           updateParam("q", q || undefined);
         }}
       >
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Search
         </label>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search products"
-          className="mt-2 w-full rounded-lg border border-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-ink"
+          className="mt-2 w-full rounded-lg border border-bone/15 bg-ink-soft px-3 py-2 text-sm outline-none focus:border-gold"
         />
       </form>
 
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Category
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
           <button
             onClick={() => updateParam("category", undefined)}
             className={`rounded-full border px-3 py-1 text-xs ${
-              !current.category ? "border-ink bg-ink text-bone" : "border-ink/20 text-ink/70"
+              !current.category ? "border-gold bg-gold text-ink" : "border-bone/20 text-bone/70"
             }`}
           >
             All
@@ -71,8 +71,8 @@ export function ShopFiltersBar({
               onClick={() => updateParam("category", cat)}
               className={`rounded-full border px-3 py-1 text-xs capitalize ${
                 current.category === cat
-                  ? "border-ink bg-ink text-bone"
-                  : "border-ink/20 text-ink/70"
+                  ? "border-gold bg-gold text-ink"
+                  : "border-bone/20 text-bone/70"
               }`}
             >
               {cat}
@@ -82,7 +82,7 @@ export function ShopFiltersBar({
       </div>
 
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Size
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -92,8 +92,8 @@ export function ShopFiltersBar({
               onClick={() => updateParam("size", current.size === size ? undefined : size)}
               className={`h-8 w-10 rounded-lg border text-xs ${
                 current.size === size
-                  ? "border-ink bg-ink text-bone"
-                  : "border-ink/20 text-ink/70"
+                  ? "border-gold bg-gold text-ink"
+                  : "border-bone/20 text-bone/70"
               }`}
             >
               {size}
@@ -103,13 +103,13 @@ export function ShopFiltersBar({
       </div>
 
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Sort by
         </p>
         <select
           defaultValue={current.sort ?? "newest"}
           onChange={(e) => updateParam("sort", e.target.value)}
-          className="mt-2 w-full rounded-lg border border-ink/15 bg-white px-3 py-2 text-sm"
+          className="mt-2 w-full rounded-lg border border-bone/15 bg-ink-soft px-3 py-2 text-sm"
         >
           {SORTS.map((s) => (
             <option key={s.value} value={s.value}>

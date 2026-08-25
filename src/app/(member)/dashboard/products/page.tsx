@@ -33,14 +33,14 @@ export default async function ProductsPage({
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="mb-10">
         <h1 className="font-display text-3xl font-semibold">Products</h1>
-        <p className="mt-2 text-ink/60">{products.length} products</p>
+        <p className="mt-2 text-bone/60">{products.length} products</p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
         <ShopFiltersBar categories={categories} current={params} />
         <div>
           {products.length === 0 ? (
-            <p className="py-20 text-center text-ink/50">
+            <p className="py-20 text-center text-bone/50">
               No products match those filters.
             </p>
           ) : (

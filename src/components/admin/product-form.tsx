@@ -88,40 +88,40 @@ export function ProductForm({
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Name</label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Name</label>
           <input
             name="name"
             required
             defaultValue={initial?.name}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Category</label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Category</label>
           <input
             name="category"
             required
             defaultValue={initial?.category}
             placeholder="e.g. hoodie, tshirt, cap"
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Description</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Description</label>
         <textarea
           name="description"
           required
           rows={4}
           defaultValue={initial?.description}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Price (NGN)</label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Price (NGN)</label>
           <input
             name="price"
             type="number"
@@ -129,11 +129,11 @@ export function ProductForm({
             step="0.01"
             required
             defaultValue={initial?.price}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
             Cost (internal)
           </label>
           <input
@@ -142,11 +142,11 @@ export function ProductForm({
             min={0}
             step="0.01"
             defaultValue={initial?.cost ?? 0}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
             Limited drop quantity
           </label>
           <input
@@ -155,7 +155,7 @@ export function ProductForm({
             min={0}
             placeholder="Leave blank if not limited"
             defaultValue={initial?.dropQuantityLimit ?? ""}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           />
         </div>
       </div>
@@ -172,25 +172,25 @@ export function ProductForm({
           <label htmlFor="isPreOrder" className="text-sm">Pre-order</label>
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
             Pre-order closes
           </label>
           <input
             name="preOrderClosesAt"
             type="date"
             defaultValue={initial?.preOrderClosesAt}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Collection</label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Collection</label>
           <select
             name="collectionId"
             defaultValue={initial?.collectionId ?? ""}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           >
             <option value="">None</option>
             {collections.map((c) => (
@@ -199,11 +199,11 @@ export function ProductForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Design</label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Design</label>
           <select
             name="designId"
             defaultValue={initial?.designId ?? ""}
-            className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
           >
             <option value="">None</option>
             {designs.map((d) => (
@@ -224,19 +224,19 @@ export function ProductForm({
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Care info</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Care info</label>
         <input
           name="careInfo"
           defaultValue={initial?.careInfo}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Images</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Images</label>
         <div className="mt-2 flex flex-wrap gap-3">
           {images.map((url) => (
-            <div key={url} className="relative h-20 w-20 overflow-hidden rounded-lg border border-ink/10">
+            <div key={url} className="relative h-20 w-20 overflow-hidden rounded-lg border border-bone/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="" className="h-full w-full object-cover" />
               <button
@@ -252,7 +252,7 @@ export function ProductForm({
             type="button"
             onClick={() => fileInput.current?.click()}
             disabled={uploading}
-            className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-ink/25 text-ink/40"
+            className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-bone/25 text-bone/40"
           >
             <UploadCloud className="h-5 w-5" />
             <span className="text-[10px]">{uploading ? "Uploading..." : "Add"}</span>
@@ -263,13 +263,13 @@ export function ProductForm({
 
       <div>
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
             Variants (size / color / stock)
           </label>
           <button
             type="button"
             onClick={() => setVariants((prev) => [...prev, { size: "", color: "", stock: 0, priceDelta: 0 }])}
-            className="flex items-center gap-1 text-xs text-ink/60 hover:text-ink"
+            className="flex items-center gap-1 text-xs text-bone/60 hover:text-bone"
           >
             <Plus className="h-3.5 w-3.5" /> Add variant
           </button>
@@ -283,7 +283,7 @@ export function ProductForm({
                 onChange={(e) =>
                   setVariants((prev) => prev.map((p, idx) => (idx === i ? { ...p, size: e.target.value } : p)))
                 }
-                className="rounded-lg border border-ink/15 px-2 py-1.5 text-sm"
+                className="rounded-lg border border-bone/15 px-2 py-1.5 text-sm"
               />
               <input
                 placeholder="Color"
@@ -291,7 +291,7 @@ export function ProductForm({
                 onChange={(e) =>
                   setVariants((prev) => prev.map((p, idx) => (idx === i ? { ...p, color: e.target.value } : p)))
                 }
-                className="rounded-lg border border-ink/15 px-2 py-1.5 text-sm"
+                className="rounded-lg border border-bone/15 px-2 py-1.5 text-sm"
               />
               <input
                 type="number"
@@ -302,7 +302,7 @@ export function ProductForm({
                     prev.map((p, idx) => (idx === i ? { ...p, stock: Number(e.target.value) } : p))
                   )
                 }
-                className="rounded-lg border border-ink/15 px-2 py-1.5 text-sm"
+                className="rounded-lg border border-bone/15 px-2 py-1.5 text-sm"
               />
               <input
                 type="number"
@@ -313,12 +313,12 @@ export function ProductForm({
                     prev.map((p, idx) => (idx === i ? { ...p, priceDelta: Number(e.target.value) } : p))
                   )
                 }
-                className="rounded-lg border border-ink/15 px-2 py-1.5 text-sm"
+                className="rounded-lg border border-bone/15 px-2 py-1.5 text-sm"
               />
               <button
                 type="button"
                 onClick={() => setVariants((prev) => prev.filter((_, idx) => idx !== i))}
-                className="text-ink/30 hover:text-clay"
+                className="text-bone/30 hover:text-clay"
               >
                 <Trash2 className="h-4 w-4" />
               </button>

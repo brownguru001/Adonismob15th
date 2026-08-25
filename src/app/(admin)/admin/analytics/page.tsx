@@ -54,7 +54,7 @@ export default async function AdminAnalyticsPage() {
   return (
     <div>
       <h1 className="font-display text-2xl font-semibold">Analytics</h1>
-      <p className="mt-1 text-sm text-ink/50">
+      <p className="mt-1 text-sm text-bone/50">
         Live figures from the database — no fabricated numbers. Values will
         be small until real orders accumulate.
       </p>
@@ -66,21 +66,21 @@ export default async function AdminAnalyticsPage() {
           { label: "Conversion rate", value: `${conversionRate.toFixed(1)}%` },
           { label: "Repeat customers", value: `${repeatRate.toFixed(1)}%` },
         ].map((c) => (
-          <div key={c.label} className="rounded-xl border border-ink/10 bg-white p-5">
-            <p className="text-xs text-ink/50">{c.label}</p>
+          <div key={c.label} className="rounded-xl border border-bone/10 bg-ink-soft p-5">
+            <p className="text-xs text-bone/50">{c.label}</p>
             <p className="mt-1 text-xl font-semibold">{c.value}</p>
           </div>
         ))}
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">Revenue, last 30 days</p>
           <div className="mt-4">
             <RevenueLineChart data={revenueSeries} />
           </div>
         </div>
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">Orders by status</p>
           <div className="mt-4">
             <OrdersByStatusChart
@@ -91,21 +91,21 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">Custom order funnel</p>
           <div className="mt-4 space-y-2 text-sm">
             {customOrdersByStatusRaw.map((c) => (
               <div key={c.status} className="flex justify-between">
                 <span>{c.status.replace(/_/g, " ")}</span>
-                <span className="text-ink/50">{c._count._all}</span>
+                <span className="text-bone/50">{c._count._all}</span>
               </div>
             ))}
-            {customOrdersByStatusRaw.length === 0 && <p className="text-ink/40">No custom orders yet.</p>}
+            {customOrdersByStatusRaw.length === 0 && <p className="text-bone/40">No custom orders yet.</p>}
           </div>
         </div>
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">Gross contribution (internal)</p>
-          <p className="mt-2 text-xs text-ink/50">
+          <p className="mt-2 text-xs text-bone/50">
             Revenue minus stored product cost across paid orders. Never shown to customers.
           </p>
           <p className="mt-4 text-2xl font-semibold">{formatNaira(grossContribution)}</p>

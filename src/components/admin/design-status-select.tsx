@@ -21,7 +21,7 @@ export function DesignStatusSelect({
           updateDesignStatus(designId, e.target.value as "DRAFT" | "PUBLISHED" | "ARCHIVED")
         )
       }
-      className="rounded-full border border-ink/15 px-3 py-1.5 text-xs"
+      className="rounded-full border border-bone/15 px-3 py-1.5 text-xs"
     >
       <option value="DRAFT">Draft</option>
       <option value="PUBLISHED">Published</option>

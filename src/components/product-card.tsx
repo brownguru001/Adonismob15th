@@ -21,7 +21,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
 
   return (
     <Link href={`/dashboard/products/${product.slug}`} className="group block">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-bone-dim">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-ink-soft">
         {image ? (
           <Image
             src={image}
@@ -31,7 +31,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-ink/30">
+          <div className="flex h-full items-center justify-center text-bone/30">
             No image
           </div>
         )}
@@ -41,17 +41,17 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           </span>
         )}
         {soldOut && (
-          <span className="absolute right-3 top-3 rounded-full bg-bone px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-ink/60">
+          <span className="absolute right-3 top-3 rounded-full bg-ink-soft px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-bone/60">
             Sold Out
           </span>
         )}
       </div>
       <div className="mt-3 flex items-start justify-between gap-2">
         <div>
-          <p className="text-sm font-medium text-ink">{product.name}</p>
-          <p className="text-xs uppercase tracking-wide text-ink/40">{product.category}</p>
+          <p className="text-sm font-medium text-bone">{product.name}</p>
+          <p className="text-xs uppercase tracking-wide text-bone/40">{product.category}</p>
         </div>
-        <p className="text-sm font-semibold text-ink">{formatNaira(product.price)}</p>
+        <p className="text-sm font-semibold text-bone">{formatNaira(product.price)}</p>
       </div>
     </Link>
   );

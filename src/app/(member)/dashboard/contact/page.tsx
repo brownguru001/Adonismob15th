@@ -12,7 +12,7 @@ export default function ContactPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="font-display text-3xl font-semibold">Contact</h1>
-      <p className="mt-2 max-w-xl text-ink/60">
+      <p className="mt-2 max-w-xl text-bone/60">
         Questions about an order, custom work, or membership? Reach the team below.
       </p>
 
@@ -21,20 +21,20 @@ export default function ContactPage() {
 
         <div className="space-y-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+            <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">
               Direct line
             </p>
-            <a href="mailto:hello@adonismob15th.com" className="mt-2 flex items-center gap-2 text-sm text-ink">
+            <a href="mailto:hello@adonismob15th.com" className="mt-2 flex items-center gap-2 text-sm text-bone">
               <Mail className="h-4 w-4" /> hello@adonismob15th.com
             </a>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+            <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">
               Custom orders
             </p>
-            <p className="mt-2 text-sm text-ink/70">
+            <p className="mt-2 text-sm text-bone/70">
               Have a design in mind? Start a{" "}
-              <Link href="/dashboard/custom-orders" className="font-medium text-ink underline">
+              <Link href="/dashboard/custom-orders" className="font-medium text-bone underline">
                 custom order request
               </Link>{" "}
               directly.

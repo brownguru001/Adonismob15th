@@ -20,7 +20,7 @@ export default function CheckoutPage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
         <h1 className="font-display text-2xl font-semibold">Nothing to check out</h1>
-        <p className="mt-2 text-ink/60">Your cart is empty.</p>
+        <p className="mt-2 text-bone/60">Your cart is empty.</p>
         <Link href="/dashboard/products" className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-bone">
           Go to products
         </Link>
@@ -60,22 +60,22 @@ export default function CheckoutPage() {
           }}
           className="space-y-4"
         >
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-ink/50">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-bone/50">
             Delivery details
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
-            <input name="fullName" required placeholder="Full name" className="rounded-lg border border-ink/15 px-4 py-3 text-sm" />
-            <input name="phone" required placeholder="Phone number" className="rounded-lg border border-ink/15 px-4 py-3 text-sm" />
+            <input name="fullName" required placeholder="Full name" className="rounded-lg border border-bone/15 px-4 py-3 text-sm" />
+            <input name="phone" required placeholder="Phone number" className="rounded-lg border border-bone/15 px-4 py-3 text-sm" />
           </div>
-          <input name="email" type="email" required placeholder="Email" className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm" />
-          <input name="line1" required placeholder="Address line 1" className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm" />
-          <input name="line2" placeholder="Address line 2 (optional)" className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm" />
+          <input name="email" type="email" required placeholder="Email" className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm" />
+          <input name="line1" required placeholder="Address line 1" className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm" />
+          <input name="line2" placeholder="Address line 2 (optional)" className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm" />
           <div className="grid gap-4 sm:grid-cols-2">
-            <input name="city" required placeholder="City" className="rounded-lg border border-ink/15 px-4 py-3 text-sm" />
-            <input name="state" required placeholder="State" className="rounded-lg border border-ink/15 px-4 py-3 text-sm" />
+            <input name="city" required placeholder="City" className="rounded-lg border border-bone/15 px-4 py-3 text-sm" />
+            <input name="state" required placeholder="State" className="rounded-lg border border-bone/15 px-4 py-3 text-sm" />
           </div>
 
-          {notice && <p className="rounded-lg bg-bone-dim p-4 text-sm text-ink/70">{notice}</p>}
+          {notice && <p className="rounded-lg bg-ink-soft p-4 text-sm text-bone/70">{notice}</p>}
 
           <button
             disabled={isPending}
@@ -83,30 +83,30 @@ export default function CheckoutPage() {
           >
             {isPending ? "Processing..." : "Pay with Flutterwave"}
           </button>
-          <p className="text-center text-xs text-ink/40">
+          <p className="text-center text-xs text-bone/40">
             You&apos;ll be redirected to Flutterwave to complete payment securely.
           </p>
         </form>
 
-        <div className="h-fit space-y-3 rounded-xl border border-ink/10 p-6 text-sm">
+        <div className="h-fit space-y-3 rounded-xl border border-bone/10 p-6 text-sm">
           {items.map((item) => (
-            <div key={item.variantId} className="flex justify-between text-ink/70">
+            <div key={item.variantId} className="flex justify-between text-bone/70">
               <span>
                 {item.name} ({item.size}/{item.color}) &times; {item.quantity}
               </span>
               <span>{formatNaira(item.unitPrice * item.quantity)}</span>
             </div>
           ))}
-          <div className="border-t border-ink/10 pt-3">
-            <div className="flex justify-between text-ink/70">
+          <div className="border-t border-bone/10 pt-3">
+            <div className="flex justify-between text-bone/70">
               <span>Subtotal</span>
               <span>{formatNaira(subtotal)}</span>
             </div>
-            <div className="flex justify-between text-ink/70">
+            <div className="flex justify-between text-bone/70">
               <span>Shipping</span>
               <span>{formatNaira(SHIPPING_FEE)}</span>
             </div>
-            <div className="mt-2 flex justify-between text-base font-semibold text-ink">
+            <div className="mt-2 flex justify-between text-base font-semibold text-bone">
               <span>Total</span>
               <span>{formatNaira(subtotal + SHIPPING_FEE)}</span>
             </div>

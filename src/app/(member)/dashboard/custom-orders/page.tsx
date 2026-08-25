@@ -34,7 +34,7 @@ export default async function CustomOrdersPage() {
           Made to order
         </p>
         <h1 className="mt-2 font-display text-3xl font-semibold">Custom Orders</h1>
-        <p className="mt-2 text-ink/60">
+        <p className="mt-2 text-bone/60">
           Tell us what you want made. We&apos;ll review your request, send a
           quote, and take it into production once you approve.
         </p>
@@ -42,8 +42,8 @@ export default async function CustomOrdersPage() {
 
       <div className="mt-6 flex flex-wrap gap-2">
         {STEPS.map((step, i) => (
-          <span key={step} className="flex items-center gap-2 text-xs text-ink/40">
-            <span className="rounded-full border border-ink/15 px-3 py-1">{step}</span>
+          <span key={step} className="flex items-center gap-2 text-xs text-bone/40">
+            <span className="rounded-full border border-bone/15 px-3 py-1">{step}</span>
             {i < STEPS.length - 1 && <span>&rarr;</span>}
           </span>
         ))}
@@ -54,7 +54,7 @@ export default async function CustomOrdersPage() {
 
         {myRequests.length > 0 && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+            <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">
               Your requests
             </p>
             <div className="mt-3 space-y-3">
@@ -62,10 +62,10 @@ export default async function CustomOrdersPage() {
                 <Link
                   key={req.id}
                   href={`/dashboard/custom-orders/${req.id}`}
-                  className="block rounded-lg border border-ink/10 p-4 text-sm hover:border-ink/30"
+                  className="block rounded-lg border border-bone/10 p-4 text-sm hover:border-bone/30"
                 >
                   <p className="font-medium">{req.productType}</p>
-                  <p className="mt-1 text-xs text-ink/50">{req.status.replace("_", " ")}</p>
+                  <p className="mt-1 text-xs text-bone/50">{req.status.replace("_", " ")}</p>
                 </Link>
               ))}
             </div>

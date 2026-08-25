@@ -17,7 +17,7 @@ export async function Header() {
   const user = session?.user;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink/10 bg-bone/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-bone/10 bg-ink/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/dashboard" className="font-display text-xl font-semibold tracking-tight">
           ADONISMOB<span className="text-gold">15TH</span>
@@ -28,7 +28,7 @@ export async function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-ink/70 transition hover:text-ink"
+              className="text-bone/70 transition hover:text-bone"
             >
               {link.label}
             </Link>
@@ -39,11 +39,11 @@ export async function Header() {
           <CartLink />
           <div className="hidden items-center gap-3 md:flex">
             {user?.role === "ADMIN" && (
-              <Link href="/admin" className="text-sm font-medium text-ink/70 hover:text-ink">
+              <Link href="/admin" className="text-sm font-medium text-bone/70 hover:text-bone">
                 Admin
               </Link>
             )}
-            <Link href="/dashboard/account" className="text-sm font-medium text-ink/70 hover:text-ink">
+            <Link href="/dashboard/account" className="text-sm font-medium text-bone/70 hover:text-bone">
               Account
             </Link>
             <form
@@ -52,7 +52,7 @@ export async function Header() {
                 await signOut({ redirectTo: "/" });
               }}
             >
-              <button className="text-sm font-medium text-ink/70 hover:text-ink">
+              <button className="text-sm font-medium text-bone/70 hover:text-bone">
                 Sign out
               </button>
             </form>

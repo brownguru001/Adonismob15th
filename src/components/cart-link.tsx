@@ -8,7 +8,7 @@ export function CartLink() {
   const { count } = useCart();
 
   return (
-    <Link href="/dashboard/cart" className="relative text-ink/80 hover:text-ink" aria-label="Cart">
+    <Link href="/dashboard/cart" className="relative text-bone/80 hover:text-bone" aria-label="Cart">
       <ShoppingBag className="h-5 w-5" strokeWidth={1.75} />
       {count > 0 && (
         <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gold text-[10px] font-semibold text-ink">

@@ -4,12 +4,12 @@ import { prisma } from "@/lib/prisma";
 import { formatNaira } from "@/lib/utils";
 
 const STATUS_STYLES: Record<string, string> = {
-  PENDING_PAYMENT: "bg-bone-dim text-ink/60",
+  PENDING_PAYMENT: "bg-ink-soft text-bone/60",
   PAID: "bg-gold/20 text-gold",
   PROCESSING: "bg-gold/20 text-gold",
   PRODUCTION: "bg-gold/20 text-gold",
   READY: "bg-gold/20 text-gold",
-  SHIPPED: "bg-ink/10 text-ink",
+  SHIPPED: "bg-bone/10 text-bone",
   DELIVERED: "bg-green-100 text-green-700",
   CANCELLED: "bg-red-100 text-red-700",
   REFUNDED: "bg-red-100 text-red-700",
@@ -28,18 +28,18 @@ export default async function OrdersPage() {
       <h1 className="font-display text-3xl font-semibold">Your Orders</h1>
 
       {orders.length === 0 ? (
-        <p className="mt-8 text-ink/60">No orders yet.</p>
+        <p className="mt-8 text-bone/60">No orders yet.</p>
       ) : (
         <div className="mt-8 divide-y divide-ink/10">
           {orders.map((order) => (
             <Link
               key={order.id}
               href={`/dashboard/orders/${order.orderNumber}`}
-              className="flex items-center justify-between py-5 hover:bg-bone-dim/40"
+              className="flex items-center justify-between py-5 hover:bg-ink-soft/40"
             >
               <div>
                 <p className="text-sm font-medium">{order.orderNumber}</p>
-                <p className="text-xs text-ink/50">
+                <p className="text-xs text-bone/50">
                   {order.items.length} item{order.items.length !== 1 ? "s" : ""} &middot;{" "}
                   {new Date(order.createdAt).toLocaleDateString()}
                 </p>

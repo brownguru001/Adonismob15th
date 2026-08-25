@@ -24,7 +24,7 @@ export function ContactForm() {
       className="space-y-4"
     >
       {sent ? (
-        <p className="rounded-lg bg-bone-dim p-6 text-sm text-ink/70">
+        <p className="rounded-lg bg-ink-soft p-6 text-sm text-bone/70">
           Thanks for reaching out. We&apos;ll reply to your email shortly.
         </p>
       ) : (
@@ -34,28 +34,28 @@ export function ContactForm() {
               name="name"
               required
               placeholder="Your name"
-              className="rounded-lg border border-ink/15 px-4 py-3 text-sm outline-none focus:border-ink"
+              className="rounded-lg border border-bone/15 px-4 py-3 text-sm outline-none focus:border-gold"
             />
             <input
               name="email"
               type="email"
               required
               placeholder="Your email"
-              className="rounded-lg border border-ink/15 px-4 py-3 text-sm outline-none focus:border-ink"
+              className="rounded-lg border border-bone/15 px-4 py-3 text-sm outline-none focus:border-gold"
             />
           </div>
           <input
             name="subject"
             required
             placeholder="Subject"
-            className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm outline-none focus:border-ink"
+            className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm outline-none focus:border-gold"
           />
           <textarea
             name="message"
             required
             rows={5}
             placeholder="How can we help?"
-            className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm outline-none focus:border-ink"
+            className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm outline-none focus:border-gold"
           />
           <button
             disabled={isPending}

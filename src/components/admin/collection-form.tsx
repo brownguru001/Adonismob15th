@@ -50,15 +50,15 @@ export function CollectionForm() {
       className="space-y-4"
     >
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Name</label>
-        <input name="name" required className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Name</label>
+        <input name="name" required className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm" />
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Description</label>
-        <textarea name="description" rows={3} className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Description</label>
+        <textarea name="description" rows={3} className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm" />
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Cover image</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Cover image</label>
         <div className="mt-2 flex items-center gap-3">
           {coverImage && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -68,7 +68,7 @@ export function CollectionForm() {
             type="button"
             onClick={() => fileInput.current?.click()}
             disabled={uploading}
-            className="flex items-center gap-2 rounded-lg border border-dashed border-ink/25 px-4 py-2 text-xs text-ink/50"
+            className="flex items-center gap-2 rounded-lg border border-dashed border-bone/25 px-4 py-2 text-xs text-bone/50"
           >
             <UploadCloud className="h-4 w-4" /> {uploading ? "Uploading..." : coverImage ? "Replace" : "Upload"}
           </button>
@@ -77,12 +77,12 @@ export function CollectionForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Start date</label>
-          <input name="startDate" type="date" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Start date</label>
+          <input name="startDate" type="date" className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm" />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">End date</label>
-          <input name="endDate" type="date" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">End date</label>
+          <input name="endDate" type="date" className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm" />
         </div>
       </div>
       <label className="flex items-center gap-2 text-sm">

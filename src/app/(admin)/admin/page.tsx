@@ -97,43 +97,43 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <h1 className="font-display text-2xl font-semibold">Dashboard</h1>
-      <p className="mt-1 text-sm text-ink/50">
+      <p className="mt-1 text-sm text-bone/50">
         Demo data is seeded for demonstration — replace with real activity as
         orders come in.
       </p>
 
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {cards.map((card) => (
-          <div key={card.label} className="rounded-xl border border-ink/10 bg-white p-5">
-            <p className="text-xs text-ink/50">{card.label}</p>
+          <div key={card.label} className="rounded-xl border border-bone/10 bg-ink-soft p-5">
+            <p className="text-xs text-bone/50">{card.label}</p>
             <p className="mt-1 text-xl font-semibold">{card.value}</p>
           </div>
         ))}
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">Best-selling products</p>
           <div className="mt-4 space-y-3">
             {stats.bestSellers.length === 0 && (
-              <p className="text-sm text-ink/40">No sales yet.</p>
+              <p className="text-sm text-bone/40">No sales yet.</p>
             )}
             {stats.bestSellers.map((item) =>
               item.product ? (
                 <div key={item.product.id} className="flex items-center justify-between text-sm">
                   <span>{item.product.name}</span>
-                  <span className="text-ink/50">{item.quantity} sold</span>
+                  <span className="text-bone/50">{item.quantity} sold</span>
                 </div>
               ) : null
             )}
           </div>
         </div>
 
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">Low stock alerts</p>
           <div className="mt-4 space-y-3">
             {stats.lowStockVariants.length === 0 && (
-              <p className="text-sm text-ink/40">Nothing running low.</p>
+              <p className="text-sm text-bone/40">Nothing running low.</p>
             )}
             {stats.lowStockVariants.map((v) => (
               <div key={v.id} className="flex items-center justify-between text-sm">
@@ -148,10 +148,10 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold">Recent orders</p>
-            <Link href="/admin/orders" className="text-xs text-ink/50 hover:text-ink">
+            <Link href="/admin/orders" className="text-xs text-bone/50 hover:text-bone">
               View all
             </Link>
           </div>
@@ -163,16 +163,16 @@ export default async function AdminDashboardPage() {
                 className="flex items-center justify-between text-sm hover:text-gold"
               >
                 <span>{order.orderNumber} &middot; {order.user.name}</span>
-                <span className="text-ink/50">{order.status.replace("_", " ")}</span>
+                <span className="text-bone/50">{order.status.replace("_", " ")}</span>
               </Link>
             ))}
           </div>
         </div>
 
-        <div className="rounded-xl border border-ink/10 bg-white p-6">
+        <div className="rounded-xl border border-bone/10 bg-ink-soft p-6">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold">Recent custom requests</p>
-            <Link href="/admin/custom-orders" className="text-xs text-ink/50 hover:text-ink">
+            <Link href="/admin/custom-orders" className="text-xs text-bone/50 hover:text-bone">
               View all
             </Link>
           </div>
@@ -184,7 +184,7 @@ export default async function AdminDashboardPage() {
                 className="flex items-center justify-between text-sm hover:text-gold"
               >
                 <span>{req.productType} &middot; {req.user.name}</span>
-                <span className="text-ink/50">{req.status.replace("_", " ")}</span>
+                <span className="text-bone/50">{req.status.replace("_", " ")}</span>
               </Link>
             ))}
           </div>

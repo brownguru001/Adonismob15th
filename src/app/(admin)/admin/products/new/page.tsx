@@ -11,7 +11,7 @@ export default async function NewProductPage() {
   return (
     <div className="max-w-3xl">
       <h1 className="font-display text-2xl font-semibold">New Product</h1>
-      <div className="mt-6 rounded-xl border border-ink/10 bg-white p-6">
+      <div className="mt-6 rounded-xl border border-bone/10 bg-ink-soft p-6">
         <ProductForm
           collections={collections}
           designs={designs}

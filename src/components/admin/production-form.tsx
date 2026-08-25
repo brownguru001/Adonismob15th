@@ -32,11 +32,11 @@ export function ProductionForm({
       className="space-y-3"
     >
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Supplier</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Supplier</label>
         <select
           name="supplierId"
           defaultValue={current?.supplierId ?? ""}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         >
           <option value="">Unassigned</option>
           {suppliers.map((s) => (
@@ -45,11 +45,11 @@ export function ProductionForm({
         </select>
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Stage</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Stage</label>
         <select
           name="stage"
           defaultValue={current?.stage ?? "QUEUED"}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         >
           {STAGES.map((s) => (
             <option key={s} value={s}>{s.replace(/_/g, " ")}</option>
@@ -57,12 +57,12 @@ export function ProductionForm({
         </select>
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Notes</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Notes</label>
         <textarea
           name="notes"
           defaultValue={current?.notes ?? ""}
           rows={2}
-          className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm"
         />
       </div>
       <button

@@ -11,9 +11,9 @@ export default async function AdminCustomOrdersPage() {
     <div>
       <h1 className="font-display text-2xl font-semibold">Custom Orders</h1>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-ink/10 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-bone/10 bg-ink-soft">
         <table className="w-full text-sm">
-          <thead className="border-b border-ink/10 text-left text-xs uppercase tracking-wide text-ink/40">
+          <thead className="border-b border-bone/10 text-left text-xs uppercase tracking-wide text-bone/40">
             <tr>
               <th className="px-4 py-3">Customer</th>
               <th className="px-4 py-3">Product</th>
@@ -30,15 +30,15 @@ export default async function AdminCustomOrdersPage() {
                     {r.user.name}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-ink/70">{r.productType}</td>
-                <td className="px-4 py-3 text-ink/70">{r.quantity}</td>
-                <td className="px-4 py-3 text-ink/70">{r.status.replace("_", " ")}</td>
-                <td className="px-4 py-3 text-ink/50">{new Date(r.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-bone/70">{r.productType}</td>
+                <td className="px-4 py-3 text-bone/70">{r.quantity}</td>
+                <td className="px-4 py-3 text-bone/70">{r.status.replace("_", " ")}</td>
+                <td className="px-4 py-3 text-bone/50">{new Date(r.createdAt).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {requests.length === 0 && <p className="p-8 text-center text-ink/40">No custom order requests yet.</p>}
+        {requests.length === 0 && <p className="p-8 text-center text-bone/40">No custom order requests yet.</p>}
       </div>
     </div>
   );

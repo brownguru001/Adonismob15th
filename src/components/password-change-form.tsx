@@ -30,7 +30,7 @@ export function PasswordChangeForm() {
         required
         autoComplete="current-password"
         placeholder="Current password"
-        className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm outline-none focus:border-ink"
+        className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm outline-none focus:border-gold"
       />
       <input
         name="newPassword"
@@ -39,7 +39,7 @@ export function PasswordChangeForm() {
         minLength={8}
         autoComplete="new-password"
         placeholder="New password (min. 8 characters)"
-        className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm outline-none focus:border-ink"
+        className="w-full rounded-lg border border-bone/15 px-4 py-3 text-sm outline-none focus:border-gold"
       />
       <button
         disabled={isPending}

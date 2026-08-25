@@ -23,7 +23,7 @@ export function OrderStatusControl({ orderId, status }: { orderId: string; statu
           else toast.success("Order status updated");
         })
       }
-      className="rounded-lg border border-ink/15 px-3 py-2 text-sm"
+      className="rounded-lg border border-bone/15 px-3 py-2 text-sm"
     >
       {STATUSES.map((s) => (
         <option key={s} value={s}>{s.replace("_", " ")}</option>

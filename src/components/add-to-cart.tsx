@@ -75,10 +75,10 @@ export function AddToCart({
 
   return (
     <div>
-      <p className="mt-3 text-2xl font-semibold text-ink">{formatNaira(unitPrice)}</p>
+      <p className="mt-3 text-2xl font-semibold text-bone">{formatNaira(unitPrice)}</p>
 
       <div className="mt-6">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Size</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">Size</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {sizes.map((s) => (
             <button
@@ -89,7 +89,7 @@ export function AddToCart({
                 setColor(firstColor);
               }}
               className={`h-9 min-w-10 rounded-lg border px-3 text-sm ${
-                size === s ? "border-ink bg-ink text-bone" : "border-ink/20 text-ink/70"
+                size === s ? "border-gold bg-gold text-ink" : "border-bone/20 text-bone/70"
               }`}
             >
               {s}
@@ -99,7 +99,7 @@ export function AddToCart({
       </div>
 
       <div className="mt-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Color</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">Color</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {colorsForSize.map((v) => (
             <button
@@ -107,7 +107,7 @@ export function AddToCart({
               onClick={() => setColor(v.color)}
               disabled={v.stock === 0}
               className={`rounded-lg border px-3 py-2 text-sm capitalize disabled:opacity-30 ${
-                color === v.color ? "border-ink bg-ink text-bone" : "border-ink/20 text-ink/70"
+                color === v.color ? "border-gold bg-gold text-ink" : "border-bone/20 text-bone/70"
               }`}
             >
               {v.color}
@@ -117,18 +117,18 @@ export function AddToCart({
       </div>
 
       <div className="mt-4 flex items-center gap-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Qty</p>
-        <div className="flex items-center rounded-lg border border-ink/20">
+        <p className="text-xs font-semibold uppercase tracking-wide text-bone/50">Qty</p>
+        <div className="flex items-center rounded-lg border border-bone/20">
           <button
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="h-9 w-9 text-ink/70"
+            className="h-9 w-9 text-bone/70"
           >
             −
           </button>
           <span className="w-8 text-center text-sm">{quantity}</span>
           <button
             onClick={() => setQuantity((q) => q + 1)}
-            className="h-9 w-9 text-ink/70"
+            className="h-9 w-9 text-bone/70"
           >
             +
           </button>
@@ -143,7 +143,7 @@ export function AddToCart({
         <button
           onClick={() => handleAdd(false)}
           disabled={!inStock}
-          className="flex-1 rounded-full border border-ink px-6 py-3 text-sm font-semibold text-ink transition hover:bg-ink hover:text-bone disabled:opacity-40"
+          className="flex-1 rounded-full border border-bone px-6 py-3 text-sm font-semibold text-bone transition hover:bg-bone hover:text-ink disabled:opacity-40"
         >
           Add to Cart
         </button>

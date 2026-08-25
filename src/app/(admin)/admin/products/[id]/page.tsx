@@ -20,7 +20,7 @@ export default async function EditProductPage({
   return (
     <div className="max-w-3xl">
       <h1 className="font-display text-2xl font-semibold">Edit Product</h1>
-      <div className="mt-6 rounded-xl border border-ink/10 bg-white p-6">
+      <div className="mt-6 rounded-xl border border-bone/10 bg-ink-soft p-6">
         <ProductForm
           initial={{
             name: product.name,

@@ -50,15 +50,15 @@ export function DesignForm({ collections }: { collections: { id: string; name: s
       className="space-y-4"
     >
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Title</label>
-        <input name="title" required className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Title</label>
+        <input name="title" required className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm" />
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Description</label>
-        <textarea name="description" rows={3} className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm" />
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Description</label>
+        <textarea name="description" rows={3} className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm" />
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Artwork</label>
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Artwork</label>
         <div className="mt-2 flex items-center gap-3">
           {imageUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -68,7 +68,7 @@ export function DesignForm({ collections }: { collections: { id: string; name: s
             type="button"
             onClick={() => fileInput.current?.click()}
             disabled={uploading}
-            className="flex items-center gap-2 rounded-lg border border-dashed border-ink/25 px-4 py-2 text-xs text-ink/50"
+            className="flex items-center gap-2 rounded-lg border border-dashed border-bone/25 px-4 py-2 text-xs text-bone/50"
           >
             <UploadCloud className="h-4 w-4" /> {uploading ? "Uploading..." : imageUrl ? "Replace" : "Upload image"}
           </button>
@@ -77,16 +77,16 @@ export function DesignForm({ collections }: { collections: { id: string; name: s
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Status</label>
-          <select name="status" defaultValue="DRAFT" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Status</label>
+          <select name="status" defaultValue="DRAFT" className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm">
             <option value="DRAFT">Draft</option>
             <option value="PUBLISHED">Published</option>
             <option value="ARCHIVED">Archived</option>
           </select>
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">Collection</label>
-          <select name="collectionId" defaultValue="" className="mt-1 w-full rounded-lg border border-ink/15 px-3 py-2 text-sm">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">Collection</label>
+          <select name="collectionId" defaultValue="" className="mt-1 w-full rounded-lg border border-bone/15 px-3 py-2 text-sm">
             <option value="">None</option>
             {collections.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>

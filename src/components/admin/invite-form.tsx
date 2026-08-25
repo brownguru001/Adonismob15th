@@ -34,7 +34,7 @@ export function InviteForm() {
           type="email"
           required
           placeholder="email@example.com"
-          className="flex-1 rounded-lg border border-ink/15 px-3 py-2 text-sm"
+          className="flex-1 rounded-lg border border-bone/15 px-3 py-2 text-sm"
         />
         <button
           disabled={isPending}
@@ -44,9 +44,9 @@ export function InviteForm() {
         </button>
       </form>
       {link && (
-        <div className="mt-3 rounded-lg bg-bone-dim p-3 text-xs text-ink/70">
+        <div className="mt-3 rounded-lg bg-ink-soft p-3 text-xs text-bone/70">
           <p>Share this link with them — it expires in 7 days:</p>
-          <p className="mt-1 break-all font-mono text-ink">{link}</p>
+          <p className="mt-1 break-all font-mono text-bone">{link}</p>
         </div>
       )}
     </div>

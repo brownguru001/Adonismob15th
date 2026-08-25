@@ -20,7 +20,7 @@ export function MembershipStatusSelect({ membershipId, status }: { membershipId:
           else toast.success("Membership updated");
         })
       }
-      className="rounded-full border border-ink/15 px-3 py-1.5 text-xs"
+      className="rounded-full border border-bone/15 px-3 py-1.5 text-xs"
     >
       {STATUSES.map((s) => (
         <option key={s} value={s}>{s}</option>

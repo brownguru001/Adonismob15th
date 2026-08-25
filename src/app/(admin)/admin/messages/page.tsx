@@ -7,23 +7,23 @@ export default async function AdminMessagesPage() {
   return (
     <div>
       <h1 className="font-display text-2xl font-semibold">Messages</h1>
-      <p className="mt-1 text-sm text-ink/50">Submissions from the public contact form.</p>
+      <p className="mt-1 text-sm text-bone/50">Submissions from the public contact form.</p>
 
       <div className="mt-6 space-y-3">
         {messages.map((m) => (
-          <div key={m.id} className="rounded-xl border border-ink/10 bg-white p-4">
+          <div key={m.id} className="rounded-xl border border-bone/10 bg-ink-soft p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium">{m.subject}</p>
-                <p className="text-xs text-ink/50">{m.name} &middot; {m.email}</p>
+                <p className="text-xs text-bone/50">{m.name} &middot; {m.email}</p>
               </div>
               <MessageReadButton id={m.id} isRead={m.isRead} />
             </div>
-            <p className="mt-2 text-sm text-ink/70">{m.message}</p>
-            <p className="mt-2 text-xs text-ink/30">{new Date(m.createdAt).toLocaleString()}</p>
+            <p className="mt-2 text-sm text-bone/70">{m.message}</p>
+            <p className="mt-2 text-xs text-bone/30">{new Date(m.createdAt).toLocaleString()}</p>
           </div>
         ))}
-        {messages.length === 0 && <p className="text-ink/40">No messages yet.</p>}
+        {messages.length === 0 && <p className="text-bone/40">No messages yet.</p>}
       </div>
     </div>
   );

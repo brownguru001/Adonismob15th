@@ -14,18 +14,18 @@ export default async function AdminCollectionsPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="space-y-3">
           {collections.map((c) => (
-            <div key={c.id} className="flex items-center justify-between rounded-xl border border-ink/10 bg-white p-4">
+            <div key={c.id} className="flex items-center justify-between rounded-xl border border-bone/10 bg-ink-soft p-4">
               <div>
                 <p className="text-sm font-medium">{c.name}</p>
-                <p className="text-xs text-ink/50">{c._count.products} products</p>
+                <p className="text-xs text-bone/50">{c._count.products} products</p>
               </div>
               {c.featured && <span className="rounded-full bg-gold/20 px-2 py-0.5 text-[10px] text-gold">Featured</span>}
             </div>
           ))}
-          {collections.length === 0 && <p className="text-ink/40">No collections yet.</p>}
+          {collections.length === 0 && <p className="text-bone/40">No collections yet.</p>}
         </div>
 
-        <div className="h-fit rounded-xl border border-ink/10 bg-white p-6">
+        <div className="h-fit rounded-xl border border-bone/10 bg-ink-soft p-6">
           <p className="text-sm font-semibold">New collection</p>
           <div className="mt-4">
             <CollectionForm />

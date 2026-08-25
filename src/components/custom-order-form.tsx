@@ -53,18 +53,18 @@ export function CustomOrderForm() {
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
             Product type
           </label>
           <input
             name="productType"
             required
             placeholder="e.g. Hoodie, T-shirt, Cap"
-            className="mt-2 w-full rounded-lg border border-ink/15 px-4 py-3 text-sm"
+            className="mt-2 w-full rounded-lg border border-bone/15 px-4 py-3 text-sm"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+          <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
             Quantity
           </label>
           <input
@@ -74,36 +74,36 @@ export function CustomOrderForm() {
             max={500}
             defaultValue={1}
             required
-            className="mt-2 w-full rounded-lg border border-ink/15 px-4 py-3 text-sm"
+            className="mt-2 w-full rounded-lg border border-bone/15 px-4 py-3 text-sm"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Sizes needed
         </label>
         <input
           name="sizes"
           required
           placeholder="e.g. 2x M, 3x L"
-          className="mt-2 w-full rounded-lg border border-ink/15 px-4 py-3 text-sm"
+          className="mt-2 w-full rounded-lg border border-bone/15 px-4 py-3 text-sm"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Color preference
         </label>
         <input
           name="colorPreference"
           placeholder="e.g. Black with gold print"
-          className="mt-2 w-full rounded-lg border border-ink/15 px-4 py-3 text-sm"
+          className="mt-2 w-full rounded-lg border border-bone/15 px-4 py-3 text-sm"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Design notes / instructions
         </label>
         <textarea
@@ -111,17 +111,17 @@ export function CustomOrderForm() {
           required
           rows={5}
           placeholder="Describe the design, placement, text/customization, and any other instructions."
-          className="mt-2 w-full rounded-lg border border-ink/15 px-4 py-3 text-sm"
+          className="mt-2 w-full rounded-lg border border-bone/15 px-4 py-3 text-sm"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+        <label className="text-xs font-semibold uppercase tracking-wide text-bone/50">
           Reference artwork (optional, up to 6 images)
         </label>
         <div className="mt-2 flex flex-wrap gap-3">
           {images.map((url) => (
-            <div key={url} className="relative h-20 w-20 overflow-hidden rounded-lg border border-ink/10">
+            <div key={url} className="relative h-20 w-20 overflow-hidden rounded-lg border border-bone/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="Reference" className="h-full w-full object-cover" />
               <button
@@ -138,7 +138,7 @@ export function CustomOrderForm() {
               type="button"
               onClick={() => fileInput.current?.click()}
               disabled={uploading}
-              className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-ink/25 text-ink/40 hover:border-ink/50"
+              className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-bone/25 text-bone/40 hover:border-bone/50"
             >
               <UploadCloud className="h-5 w-5" />
               <span className="text-[10px]">{uploading ? "Uploading..." : "Add image"}</span>

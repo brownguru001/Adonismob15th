@@ -13,28 +13,28 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
       <h1 className="font-display text-3xl font-semibold">Dashboard</h1>
-      <p className="mt-1 text-ink/60">{user.name} &middot; {user.email}</p>
+      <p className="mt-1 text-bone/60">{user.name} &middot; {user.email}</p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        <Link href="/dashboard/orders" className="rounded-xl border border-ink/10 p-6 hover:border-ink/30">
-          <p className="text-sm text-ink/50">Orders</p>
+        <Link href="/dashboard/orders" className="rounded-xl border border-bone/10 p-6 hover:border-bone/30">
+          <p className="text-sm text-bone/50">Orders</p>
           <p className="mt-1 text-2xl font-semibold">{orderCount}</p>
-          <p className="mt-2 text-sm text-ink/60">Track order status and history</p>
+          <p className="mt-2 text-sm text-bone/60">Track order status and history</p>
         </Link>
-        <Link href="/dashboard/custom-orders" className="rounded-xl border border-ink/10 p-6 hover:border-ink/30">
-          <p className="text-sm text-ink/50">Custom Orders</p>
+        <Link href="/dashboard/custom-orders" className="rounded-xl border border-bone/10 p-6 hover:border-bone/30">
+          <p className="text-sm text-bone/50">Custom Orders</p>
           <p className="mt-1 text-2xl font-semibold">{customOrderCount}</p>
-          <p className="mt-2 text-sm text-ink/60">View custom order requests</p>
+          <p className="mt-2 text-sm text-bone/60">View custom order requests</p>
         </Link>
       </div>
 
-      <div className="mt-8 rounded-xl border border-ink/10 p-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-ink/50">
+      <div className="mt-8 rounded-xl border border-bone/10 p-6">
+        <p className="text-sm font-semibold uppercase tracking-wide text-bone/50">
           Membership
         </p>
-        <p className="mt-2 text-sm text-ink/70">
+        <p className="mt-2 text-sm text-bone/70">
           Status:{" "}
-          <span className="font-medium text-ink">
+          <span className="font-medium text-bone">
             {membership?.status ?? (user.role === "ADMIN" ? "ADMIN" : "—")}
           </span>
         </p>
@@ -42,12 +42,12 @@ export default async function DashboardPage() {
 
       <Link
         href="/dashboard/account"
-        className="mt-4 block rounded-xl border border-ink/10 p-6 hover:border-ink/30"
+        className="mt-4 block rounded-xl border border-bone/10 p-6 hover:border-bone/30"
       >
-        <p className="text-sm font-semibold uppercase tracking-wide text-ink/50">
+        <p className="text-sm font-semibold uppercase tracking-wide text-bone/50">
           Account
         </p>
-        <p className="mt-2 text-sm text-ink/70">Change your password</p>
+        <p className="mt-2 text-sm text-bone/70">Change your password</p>
       </Link>
     </div>
   );

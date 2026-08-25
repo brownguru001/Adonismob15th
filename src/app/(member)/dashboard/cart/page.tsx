@@ -12,7 +12,7 @@ export default function CartPage() {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
         <h1 className="font-display text-2xl font-semibold">Your cart is empty</h1>
-        <p className="mt-2 text-ink/60">Browse the products to find something you like.</p>
+        <p className="mt-2 text-bone/60">Browse the products to find something you like.</p>
         <Link
           href="/dashboard/products"
           className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-bone hover:bg-ink-soft"
@@ -31,7 +31,7 @@ export default function CartPage() {
         <div className="divide-y divide-ink/10">
           {items.map((item) => (
             <div key={item.variantId} className="flex gap-4 py-6">
-              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-bone-dim">
+              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-ink-soft">
                 {item.image && (
                   <Image src={item.image} alt={item.name} fill className="object-cover" sizes="80px" />
                 )}
@@ -42,31 +42,31 @@ export default function CartPage() {
                     <Link href={`/dashboard/products/${item.slug}`} className="text-sm font-medium hover:text-gold">
                       {item.name}
                     </Link>
-                    <p className="text-xs text-ink/50">
+                    <p className="text-xs text-bone/50">
                       {item.size} / {item.color}
                     </p>
                   </div>
                   <p className="text-sm font-semibold">{formatNaira(item.unitPrice * item.quantity)}</p>
                 </div>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center rounded-lg border border-ink/20">
+                  <div className="flex items-center rounded-lg border border-bone/20">
                     <button
                       onClick={() => updateQuantity(item.variantId, Math.max(1, item.quantity - 1))}
-                      className="h-8 w-8 text-sm text-ink/70"
+                      className="h-8 w-8 text-sm text-bone/70"
                     >
                       −
                     </button>
                     <span className="w-8 text-center text-sm">{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                      className="h-8 w-8 text-sm text-ink/70"
+                      className="h-8 w-8 text-sm text-bone/70"
                     >
                       +
                     </button>
                   </div>
                   <button
                     onClick={() => removeItem(item.variantId)}
-                    className="text-xs text-ink/40 underline hover:text-clay"
+                    className="text-xs text-bone/40 underline hover:text-clay"
                   >
                     Remove
                   </button>
@@ -76,12 +76,12 @@ export default function CartPage() {
           ))}
         </div>
 
-        <div className="h-fit rounded-xl border border-ink/10 p-6">
-          <div className="flex justify-between text-sm text-ink/70">
+        <div className="h-fit rounded-xl border border-bone/10 p-6">
+          <div className="flex justify-between text-sm text-bone/70">
             <span>Subtotal</span>
             <span>{formatNaira(subtotal)}</span>
           </div>
-          <p className="mt-1 text-xs text-ink/40">Shipping calculated at checkout.</p>
+          <p className="mt-1 text-xs text-bone/40">Shipping calculated at checkout.</p>
           <Link
             href="/dashboard/checkout"
             className="mt-6 block rounded-full bg-ink px-6 py-3 text-center text-sm font-semibold text-bone hover:bg-ink-soft"

@@ -10,7 +10,7 @@ export function RevokeInviteButton({ invitationId }: { invitationId: string }) {
     <button
       onClick={() => startTransition(() => revokeInvitation(invitationId))}
       disabled={isPending}
-      className="text-xs text-ink/40 underline hover:text-clay"
+      className="text-xs text-bone/40 underline hover:text-clay"
     >
       Revoke
     </button>

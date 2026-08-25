@@ -35,7 +35,7 @@ export default async function ProductPage({
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="space-y-4">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-bone-dim">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-ink-soft">
             {product.images[0] && (
               <Image
                 src={product.images[0]}
@@ -50,7 +50,7 @@ export default async function ProductPage({
           {product.images.length > 1 && (
             <div className="grid grid-cols-4 gap-3">
               {product.images.slice(1, 5).map((img) => (
-                <div key={img} className="relative aspect-square overflow-hidden rounded-lg bg-bone-dim">
+                <div key={img} className="relative aspect-square overflow-hidden rounded-lg bg-ink-soft">
                   <Image src={img} alt={product.name} fill className="object-cover" sizes="25vw" />
                 </div>
               ))}
@@ -66,14 +66,14 @@ export default async function ProductPage({
           )}
           <h1 className="font-display text-3xl font-semibold">{product.name}</h1>
           {product.collection && (
-            <p className="mt-1 text-sm text-ink/50">{product.collection.name}</p>
+            <p className="mt-1 text-sm text-bone/50">{product.collection.name}</p>
           )}
           {product.dropQuantityLimit !== null && !dropSoldOut && (
             <p className="mt-1 text-xs text-clay">
               Limited drop — {product.dropQuantityRemaining} of {product.dropQuantityLimit} remaining
             </p>
           )}
-          {dropSoldOut && <p className="mt-1 text-xs text-ink/50">This drop has sold out.</p>}
+          {dropSoldOut && <p className="mt-1 text-xs text-bone/50">This drop has sold out.</p>}
 
           <AddToCart
             product={{
@@ -92,21 +92,21 @@ export default async function ProductPage({
             }}
           />
 
-          <div className="mt-10 space-y-6 border-t border-ink/10 pt-6 text-sm">
+          <div className="mt-10 space-y-6 border-t border-bone/10 pt-6 text-sm">
             <div>
-              <p className="font-semibold text-ink">Description</p>
-              <p className="mt-2 text-ink/70">{product.description}</p>
+              <p className="font-semibold text-bone">Description</p>
+              <p className="mt-2 text-bone/70">{product.description}</p>
             </div>
             {product.design?.description && (
               <div>
-                <p className="font-semibold text-ink">Design</p>
-                <p className="mt-2 text-ink/70">{product.design.description}</p>
+                <p className="font-semibold text-bone">Design</p>
+                <p className="mt-2 text-bone/70">{product.design.description}</p>
               </div>
             )}
             {product.careInfo && (
               <div>
-                <p className="font-semibold text-ink">Care</p>
-                <p className="mt-2 text-ink/70">{product.careInfo}</p>
+                <p className="font-semibold text-bone">Care</p>
+                <p className="mt-2 text-bone/70">{product.careInfo}</p>
               </div>
             )}
           </div>
