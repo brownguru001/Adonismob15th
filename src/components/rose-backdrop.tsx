@@ -13,11 +13,19 @@ function rotationForPath(path: string) {
   return hash;
 }
 
+// Only the gate and the (auth) screens (sign-in, invite redemption) get
+// this backdrop — the members area has its own RoseBackground instead.
+function isVoidScreen(pathname: string) {
+  return pathname === "/" || pathname.startsWith("/login") || pathname.startsWith("/invite");
+}
+
 // Lives once in the root layout, which never unmounts across navigation —
 // that persistence is what lets the CSS transition animate smoothly from
 // the previous route's angle to the new one on every page change.
 export function RoseBackdrop() {
   const pathname = usePathname();
+  if (!isVoidScreen(pathname)) return null;
+
   const rotation = rotationForPath(pathname);
 
   return (
