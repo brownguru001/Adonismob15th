@@ -33,7 +33,7 @@ AUTH_SECRET="<generate with: npx auth secret>"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
-Then run migrations and (optionally) seed demo data:
+Then run migrations and bootstrap an admin account:
 
 ```bash
 npm run db:migrate   # prisma migrate dev
@@ -41,22 +41,22 @@ npm run db:seed      # prisma db seed
 npm run dev
 ```
 
-### Demo accounts (seeded)
+### Seeding
 
-| Role | Email | Password | Notes |
-|---|---|---|---|
-| Admin | `admin@adonismob15th.com` | `Adonis15th!Admin` | Full access |
-| Member, verified | `amara@example.com` | `Demo1234!` | Normal active member |
-| Member, suspended | `tunde@example.com` | `Demo1234!` | Demonstrates access being cut off — lands on `/access-restricted` |
-| Member, verified | `zainab@example.com` | `Demo1234!` | Normal active member |
+`db:seed` creates exactly one thing: a single admin account, so a fresh
+database has a way in. It does **not** create demo members, products,
+designs, collections, or orders — this is a live platform, and all of
+that comes from the admin dashboard, not from seed data.
 
-A pending invitation is also seeded — visit `/invite/seed-demo-invite` to
-walk through account creation the way a real invitee would.
+Default login if you don't set `SEED_ADMIN_EMAIL`/`SEED_ADMIN_PASSWORD`
+in `.env`: `admin@adonismob15th.com` / `ChangeMe123!`.
 
-**These are demo credentials for local development only.** On any
-deployment reachable from the internet, sign in and immediately change the
-admin password from `/admin/settings` (or a member's password from
-`/dashboard/account`) — do not leave the seeded password in place.
+**Change this password immediately** via `/admin/settings` on any
+deployment reachable from the internet — don't leave the seeded password
+in place, whether it's the default above or a custom one you set.
+
+Members only ever get in through an invitation issued from
+`/admin/access` — there is no seeded member and no public registration.
 
 All seeded data is clearly synthetic — see `prisma/seed.ts`. Nothing in the
 admin dashboard is fabricated at runtime; analytics are computed live from
