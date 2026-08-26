@@ -1,40 +1,29 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { RoseMotif } from "@/components/rose-motif";
-
-// A deterministic angle per route, not a random one — so the same page
-// always shows the same orientation, and only navigating actually turns it.
-function rotationForPath(path: string) {
-  let hash = 0;
-  for (let i = 0; i < path.length; i++) {
-    hash = (hash * 31 + path.charCodeAt(i)) % 360;
-  }
-  return hash;
-}
+import { RoseSequence } from "@/components/rose-sequence";
 
 // Only the gate and the (auth) screens (sign-in, invite redemption) get
-// this backdrop — the members area has its own RoseBackground instead.
+// this backdrop — the members area has its own colour version instead.
 function isVoidScreen(pathname: string) {
   return pathname === "/" || pathname.startsWith("/login") || pathname.startsWith("/invite");
 }
 
 // Lives once in the root layout, which never unmounts across navigation —
-// that persistence is what lets the CSS transition animate smoothly from
-// the previous route's angle to the new one on every page change.
+// that persistence is what keeps the scroll-driven rotation continuous
+// across route changes on the gate/auth screens.
 export function RoseBackdrop() {
   const pathname = usePathname();
   if (!isVoidScreen(pathname)) return null;
 
-  const rotation = rotationForPath(pathname);
-
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 flex items-center justify-center overflow-hidden">
-      <RoseMotif
-        className="h-[140vh] w-auto text-rose opacity-[0.05]"
+      <RoseSequence
+        variant="line"
+        className="h-[46vh] w-auto max-w-none"
         style={{
-          transform: `rotate(${rotation}deg)`,
-          transition: "transform 1.6s cubic-bezier(0.22, 1, 0.36, 1)",
+          filter: "sepia(0.35) saturate(0.5) brightness(1.15) hue-rotate(-8deg)",
+          mixBlendMode: "screen",
         }}
       />
     </div>
