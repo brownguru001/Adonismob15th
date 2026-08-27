@@ -7,8 +7,8 @@ import { RoseSequence } from "@/components/rose-sequence";
 // Login/invite get a smaller, centered treatment since it should read clean,
 // not overwhelm the form.
 function sizeForPath(pathname: string): string | null {
-  if (pathname === "/") return "h-[64vh]";
-  if (pathname.startsWith("/login") || pathname.startsWith("/invite")) return "h-[36vh]";
+  if (pathname === "/") return "h-[165vh]";
+  if (pathname.startsWith("/login") || pathname.startsWith("/invite")) return "h-[120vh]";
   return null;
 }
 
