@@ -94,35 +94,35 @@ enum ProductionStage {
 // ---------- Identity & membership ----------
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  passwordHash  String
-  name          String
-  phone         String?
-  role          Role     @default(MEMBER)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role     @default(MEMBER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  membership    Membership?
-  addresses     Address[]
-  orders        Order[]
-  customOrders  CustomOrder[]
-  adminActions  AdminAction[]     @relation("AdminActionActor")
-  invitationsSent Invitation[]    @relation("InvitationInviter")
+  membership      Membership?
+  addresses       Address[]
+  orders          Order[]
+  customOrders    CustomOrder[]
+  adminActions    AdminAction[] @relation("AdminActionActor")
+  invitationsSent Invitation[]  @relation("InvitationInviter")
 
   @@index([role])
 }
 
 model Membership {
-  id             String           @id @default(cuid())
-  userId         String           @unique
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status         MembershipStatus @default(PENDING)
-  verifiedAt     DateTime?
-  verifiedById   String?
-  note           String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id           String           @id @default(cuid())
+  userId       String           @unique
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status       MembershipStatus @default(PENDING)
+  verifiedAt   DateTime?
+  verifiedById String?
+  note         String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
   @@index([status])
 }
@@ -143,20 +143,20 @@ model Invitation {
 }
 
 model Address {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fullName    String
-  phone       String
-  line1       String
-  line2       String?
-  city        String
-  state       String
-  country     String   @default("Nigeria")
-  isDefault   Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName  String
+  phone     String
+  line1     String
+  line2     String?
+  city      String
+  state     String
+  country   String   @default("Nigeria")
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-  orders      Order[]
+  orders Order[]
 
   @@index([userId])
 }
@@ -164,83 +164,83 @@ model Address {
 // ---------- Catalog ----------
 
 model Collection {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
-  slug        String     @unique
+  slug        String    @unique
   description String?
   coverImage  String?
   startDate   DateTime?
   endDate     DateTime?
-  featured    Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  featured    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  products    Product[]
-  designs     Design[]
+  products Product[]
+  designs  Design[]
 
   @@index([featured])
 }
 
 model Design {
-  id            String       @id @default(cuid())
-  title         String
-  description   String?
-  imageUrl      String
-  status        DesignStatus @default(DRAFT)
-  collectionId  String?
-  collection    Collection?  @relation(fields: [collectionId], references: [id])
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id           String       @id @default(cuid())
+  title        String
+  description  String?
+  imageUrl     String
+  status       DesignStatus @default(DRAFT)
+  collectionId String?
+  collection   Collection?  @relation(fields: [collectionId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
-  products      Product[]
+  products Product[]
 
   @@index([status])
 }
 
 model Product {
-  id                    String     @id @default(cuid())
+  id                    String      @id @default(cuid())
   name                  String
-  slug                  String     @unique
+  slug                  String      @unique
   description           String
   category              String
-  price                 Decimal    @db.Decimal(10, 2)
-  cost                  Decimal    @db.Decimal(10, 2) @default(0)
+  price                 Decimal     @db.Decimal(10, 2)
+  cost                  Decimal     @default(0) @db.Decimal(10, 2)
   images                String[]
   careInfo              String?
-  featured              Boolean    @default(false)
-  isActive              Boolean    @default(true)
+  featured              Boolean     @default(false)
+  isActive              Boolean     @default(true)
   // Pre-order / limited-drop foundation — deliberately minimal. Not every
   // product uses these; null means "not a pre-order" / "no drop cap".
-  isPreOrder            Boolean    @default(false)
+  isPreOrder            Boolean     @default(false)
   preOrderClosesAt      DateTime?
   dropQuantityLimit     Int?
   dropQuantityRemaining Int?
   collectionId          String?
   collection            Collection? @relation(fields: [collectionId], references: [id])
   designId              String?
-  design                Design?    @relation(fields: [designId], references: [id])
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
+  design                Design?     @relation(fields: [designId], references: [id])
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
 
-  variants      ProductVariant[]
-  orderItems    OrderItem[]
+  variants   ProductVariant[]
+  orderItems OrderItem[]
 
   @@index([category])
   @@index([featured])
 }
 
 model ProductVariant {
-  id          String   @id @default(cuid())
-  productId   String
-  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  size        String
-  color       String
-  sku         String   @unique
-  stock       Int      @default(0)
-  priceDelta  Decimal  @db.Decimal(10, 2) @default(0)
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size       String
+  color      String
+  sku        String   @unique
+  stock      Int      @default(0)
+  priceDelta Decimal  @default(0) @db.Decimal(10, 2)
+  createdAt  DateTime @default(now())
 
-  orderItems  OrderItem[]
+  orderItems OrderItem[]
 
   @@unique([productId, size, color])
   @@index([productId])
@@ -249,20 +249,20 @@ model ProductVariant {
 // ---------- Orders / payments ----------
 
 model Order {
-  id              String      @id @default(cuid())
-  orderNumber     String      @unique
-  userId          String
-  user            User        @relation(fields: [userId], references: [id])
-  addressId       String?
-  address         Address?    @relation(fields: [addressId], references: [id])
-  status          OrderStatus @default(PENDING_PAYMENT)
-  subtotal        Decimal     @db.Decimal(10, 2)
-  shippingFee     Decimal     @db.Decimal(10, 2) @default(0)
-  total           Decimal     @db.Decimal(10, 2)
-  customerEmail   String
-  customerPhone   String
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  addressId     String?
+  address       Address?    @relation(fields: [addressId], references: [id])
+  status        OrderStatus @default(PENDING_PAYMENT)
+  subtotal      Decimal     @db.Decimal(10, 2)
+  shippingFee   Decimal     @default(0) @db.Decimal(10, 2)
+  total         Decimal     @db.Decimal(10, 2)
+  customerEmail String
+  customerPhone String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   items           OrderItem[]
   payments        Payment[]
@@ -285,35 +285,38 @@ model OrderStatusEvent {
 }
 
 model OrderItem {
-  id          String          @id @default(cuid())
-  orderId     String
-  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId   String
-  product     Product         @relation(fields: [productId], references: [id])
-  variantId   String
-  variant     ProductVariant  @relation(fields: [variantId], references: [id])
-  quantity    Int
-  unitPrice   Decimal         @db.Decimal(10, 2)
-  lineTotal   Decimal         @db.Decimal(10, 2)
+  id        String         @id @default(cuid())
+  orderId   String
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product        @relation(fields: [productId], references: [id])
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int
+  unitPrice Decimal        @db.Decimal(10, 2)
+  lineTotal Decimal        @db.Decimal(10, 2)
 
   @@index([orderId])
 }
 
 model Payment {
-  id              String          @id @default(cuid())
-  orderId         String
-  order           Order           @relation(fields: [orderId], references: [id])
-  provider        PaymentProvider @default(FLUTTERWAVE)
-  txRef           String          @unique
-  providerRef     String?
-  amount          Decimal         @db.Decimal(10, 2)
-  status          PaymentStatus   @default(PENDING)
-  verifiedAt      DateTime?
-  rawResponse     Json?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id            String          @id @default(cuid())
+  orderId       String?
+  order         Order?          @relation(fields: [orderId], references: [id])
+  customOrderId String?
+  customOrder   CustomOrder?    @relation(fields: [customOrderId], references: [id])
+  provider      PaymentProvider @default(FLUTTERWAVE)
+  txRef         String          @unique
+  providerRef   String?
+  amount        Decimal         @db.Decimal(10, 2)
+  status        PaymentStatus   @default(PENDING)
+  verifiedAt    DateTime?
+  rawResponse   Json?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 
   @@index([orderId])
+  @@index([customOrderId])
   @@index([status])
 }
 
@@ -335,7 +338,8 @@ model CustomOrder {
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
-  statusEvents    CustomOrderStatusEvent[]
+  statusEvents CustomOrderStatusEvent[]
+  payments     Payment[]
 
   @@index([userId])
   @@index([status])
@@ -355,19 +359,19 @@ model CustomOrderStatusEvent {
 // ---------- Production / suppliers ----------
 
 model Supplier {
-  id           String   @id @default(cuid())
-  name         String
-  contactName  String?
-  contactEmail String?
-  contactPhone String?
-  location     String?
-  services     String?
-  pricingNotes String?
-  capabilities String?
-  status       SupplierStatus @default(ACTIVE)
+  id            String         @id @default(cuid())
+  name          String
+  contactName   String?
+  contactEmail  String?
+  contactPhone  String?
+  location      String?
+  services      String?
+  pricingNotes  String?
+  capabilities  String?
+  status        SupplierStatus @default(ACTIVE)
   internalNotes String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   productionOrders ProductionOrder[]
 
@@ -375,15 +379,15 @@ model Supplier {
 }
 
 model ProductionOrder {
-  id          String          @id @default(cuid())
-  orderId     String          @unique
-  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  supplierId  String?
-  supplier    Supplier?       @relation(fields: [supplierId], references: [id])
-  stage       ProductionStage @default(QUEUED)
-  notes       String?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id         String          @id @default(cuid())
+  orderId    String          @unique
+  order      Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  supplierId String?
+  supplier   Supplier?       @relation(fields: [supplierId], references: [id])
+  stage      ProductionStage @default(QUEUED)
+  notes      String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
 
   @@index([supplierId])
   @@index([stage])
@@ -406,14 +410,14 @@ model ContactMessage {
 // ---------- Audit ----------
 
 model AdminAction {
-  id        String   @id @default(cuid())
-  actorId   String
-  actor     User     @relation("AdminActionActor", fields: [actorId], references: [id])
-  action    String
+  id         String   @id @default(cuid())
+  actorId    String
+  actor      User     @relation("AdminActionActor", fields: [actorId], references: [id])
+  action     String
   targetType String
-  targetId  String
-  metadata  Json?
-  createdAt DateTime @default(now())
+  targetId   String
+  metadata   Json?
+  createdAt  DateTime @default(now())
 
   @@index([actorId])
   @@index([targetType, targetId])

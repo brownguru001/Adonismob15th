@@ -56,3 +56,75 @@ export async function updateCustomOrder(customOrderId: string, formData: FormDat
   revalidatePath("/admin/custom-orders");
   return { ok: true };
 }
+
+export async function confirmCustomOrderBankTransfer(customOrderId: string) {
+  const admin = await requireAdmin();
+
+  const customOrder = await prisma.customOrder.findUnique({
+    where: { id: customOrderId },
+    include: { payments: true },
+  });
+  if (!customOrder) return { ok: false, error: "Custom order not found." };
+
+  const payment = customOrder.payments.find((p) => p.provider === "BANK_TRANSFER");
+  if (!payment || payment.status !== "AWAITING_VERIFICATION") {
+    return { ok: false, error: "This request has no bank transfer awaiting confirmation." };
+  }
+
+  await prisma.$transaction([
+    prisma.payment.update({ where: { id: payment.id }, data: { status: "SUCCESSFUL", verifiedAt: new Date() } }),
+    prisma.customOrder.update({ where: { id: customOrder.id }, data: { status: "PRODUCTION" } }),
+    prisma.customOrderStatusEvent.create({
+      data: { customOrderId: customOrder.id, status: "PRODUCTION", note: "Bank transfer confirmed by admin." },
+    }),
+  ]);
+
+  await logAdminAction({
+    actorId: admin.id,
+    action: "custom_order.bank_transfer_confirmed",
+    targetType: "CustomOrder",
+    targetId: customOrderId,
+  });
+
+  revalidatePath(`/admin/custom-orders/${customOrderId}`);
+  revalidatePath("/admin/custom-orders");
+  return { ok: true };
+}
+
+export async function rejectCustomOrderBankTransfer(customOrderId: string) {
+  const admin = await requireAdmin();
+
+  const customOrder = await prisma.customOrder.findUnique({
+    where: { id: customOrderId },
+    include: { payments: true },
+  });
+  if (!customOrder) return { ok: false, error: "Custom order not found." };
+
+  const payment = customOrder.payments.find((p) => p.provider === "BANK_TRANSFER");
+  if (!payment || payment.status !== "AWAITING_VERIFICATION") {
+    return { ok: false, error: "This request has no bank transfer awaiting confirmation." };
+  }
+
+  await prisma.$transaction([
+    prisma.payment.update({ where: { id: payment.id }, data: { status: "FAILED" } }),
+    prisma.customOrder.update({ where: { id: customOrder.id }, data: { status: "QUOTE_SENT" } }),
+    prisma.customOrderStatusEvent.create({
+      data: {
+        customOrderId: customOrder.id,
+        status: "QUOTE_SENT",
+        note: "Bank transfer could not be confirmed by admin — back to quote sent.",
+      },
+    }),
+  ]);
+
+  await logAdminAction({
+    actorId: admin.id,
+    action: "custom_order.bank_transfer_rejected",
+    targetType: "CustomOrder",
+    targetId: customOrderId,
+  });
+
+  revalidatePath(`/admin/custom-orders/${customOrderId}`);
+  revalidatePath("/admin/custom-orders");
+  return { ok: true };
+}

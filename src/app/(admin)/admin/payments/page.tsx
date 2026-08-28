@@ -13,7 +13,10 @@ const STATUS_COLOR: Record<string, string> = {
 export default async function AdminPaymentsPage() {
   const payments = await prisma.payment.findMany({
     orderBy: { createdAt: "desc" },
-    include: { order: { include: { user: true } } },
+    include: {
+      order: { include: { user: true } },
+      customOrder: { include: { user: true } },
+    },
     take: 100,
   });
 
@@ -41,11 +44,19 @@ export default async function AdminPaymentsPage() {
               <tr key={p.id}>
                 <td className="px-4 py-3 font-mono text-xs text-bone/60">{p.txRef}</td>
                 <td className="px-4 py-3">
-                  <Link href={`/admin/orders/${p.orderId}`} className="hover:text-gold">
-                    {p.order.orderNumber}
-                  </Link>
+                  {p.order ? (
+                    <Link href={`/admin/orders/${p.orderId}`} className="hover:text-gold">
+                      {p.order.orderNumber}
+                    </Link>
+                  ) : p.customOrder ? (
+                    <Link href={`/admin/custom-orders/${p.customOrderId}`} className="hover:text-gold">
+                      Custom order
+                    </Link>
+                  ) : (
+                    <span className="text-bone/40">—</span>
+                  )}
                 </td>
-                <td className="px-4 py-3 text-bone/70">{p.order.user.name}</td>
+                <td className="px-4 py-3 text-bone/70">{p.order?.user.name ?? p.customOrder?.user.name ?? "—"}</td>
                 <td className="px-4 py-3">{formatNaira(p.amount)}</td>
                 <td className="px-4 py-3">
                   <span className={`rounded-full px-2.5 py-1 text-xs ${STATUS_COLOR[p.status]}`}>{p.status}</span>

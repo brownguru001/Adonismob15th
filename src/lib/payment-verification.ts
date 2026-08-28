@@ -22,13 +22,15 @@ export async function confirmFlutterwaveTransaction(transactionId: string) {
     include: { order: { include: { items: true } } },
   });
 
-  if (!payment) {
+  if (!payment || !payment.orderId || !payment.order) {
     return { ok: false as const, reason: "No matching order found for this transaction." };
   }
+  const orderId = payment.orderId;
+  const order = payment.order;
 
   // Idempotency: already processed, nothing to do.
   if (payment.status === "SUCCESSFUL") {
-    return { ok: true as const, order: payment.order, alreadyProcessed: true };
+    return { ok: true as const, order, alreadyProcessed: true };
   }
 
   const amountMatches = Math.abs(data.amount - Number(payment.amount)) < 1;
@@ -45,17 +47,17 @@ export async function confirmFlutterwaveTransaction(transactionId: string) {
         },
       });
       await tx.order.update({
-        where: { id: payment.orderId },
+        where: { id: orderId },
         data: { status: "CANCELLED" },
       });
       await tx.orderStatusEvent.create({
         data: {
-          orderId: payment.orderId,
+          orderId,
           status: "CANCELLED",
           note: "Payment verification failed or amount/currency mismatch.",
         },
       });
-      for (const item of payment.order.items) {
+      for (const item of order.items) {
         await tx.productVariant.update({
           where: { id: item.variantId },
           data: { stock: { increment: item.quantity } },
@@ -75,17 +77,17 @@ export async function confirmFlutterwaveTransaction(transactionId: string) {
         rawResponse: verification as unknown as object,
       },
     });
-    const order = await tx.order.update({
-      where: { id: payment.orderId },
+    const updated = await tx.order.update({
+      where: { id: orderId },
       data: { status: "PAID" },
     });
     await tx.orderStatusEvent.create({
-      data: { orderId: payment.orderId, status: "PAID", note: "Payment verified via Flutterwave." },
+      data: { orderId, status: "PAID", note: "Payment verified via Flutterwave." },
     });
     await tx.productionOrder.create({
-      data: { orderId: payment.orderId, stage: "QUEUED" },
+      data: { orderId, stage: "QUEUED" },
     });
-    return order;
+    return updated;
   });
 
   return { ok: true as const, order: updatedOrder, alreadyProcessed: false };

@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { formatNaira } from "@/lib/utils";
 import { CustomOrderControl } from "@/components/admin/custom-order-control";
+import { CustomOrderBankTransferControl } from "@/components/admin/custom-order-bank-transfer-control";
 
 export default async function AdminCustomOrderDetailPage({
   params,
@@ -11,7 +13,7 @@ export default async function AdminCustomOrderDetailPage({
   const { id } = await params;
   const customOrder = await prisma.customOrder.findUnique({
     where: { id },
-    include: { user: true, statusEvents: { orderBy: { createdAt: "asc" } } },
+    include: { user: true, statusEvents: { orderBy: { createdAt: "asc" } }, payments: true },
   });
 
   if (!customOrder) notFound();
@@ -56,6 +58,20 @@ export default async function AdminCustomOrderDetailPage({
               adminNotes={customOrder.adminNotes}
             />
           </div>
+
+          <p className="mt-6 text-sm font-semibold">Payments</p>
+          <div className="mt-3 space-y-2 text-sm">
+            {customOrder.payments.map((p) => (
+              <div key={p.id} className="flex justify-between">
+                <span className="font-mono text-xs text-bone/60">{p.txRef}</span>
+                <span>{formatNaira(p.amount)} &middot; {p.status}</span>
+              </div>
+            ))}
+            {customOrder.payments.length === 0 && <p className="text-bone/40">No payments recorded.</p>}
+          </div>
+          {customOrder.payments.some((p) => p.provider === "BANK_TRANSFER" && p.status === "AWAITING_VERIFICATION") && (
+            <CustomOrderBankTransferControl customOrderId={customOrder.id} />
+          )}
 
           <p className="mt-6 text-sm font-semibold">Timeline</p>
           <div className="mt-3 space-y-2 text-sm">
