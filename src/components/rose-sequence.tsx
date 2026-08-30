@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const FRAME_COUNT = 80;
-const DEGREES_PER_PIXEL = 0.12;
+const DEGREES_PER_PIXEL = 0.24;
 
 export type RoseVariant = "line" | "color";
 
