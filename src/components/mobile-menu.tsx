@@ -7,9 +7,11 @@ import { Menu as MenuIcon, X } from "lucide-react";
 export function Menu({
   links,
   isAdmin,
+  onSignOut,
 }: {
   links: { href: string; label: string }[];
   isAdmin: boolean;
+  onSignOut: () => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -44,6 +46,9 @@ export function Menu({
               <Link href="/dashboard/account" onClick={() => setOpen(false)} className="block py-1 text-bone/80">
                 Account
               </Link>
+              <form action={onSignOut}>
+                <button className="block py-1 text-left text-bone/80">Sign out</button>
+              </form>
             </div>
           </nav>
         </div>

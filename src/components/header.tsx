@@ -16,6 +16,11 @@ export async function Header() {
   const session = await auth();
   const user = session?.user;
 
+  async function handleSignOut() {
+    "use server";
+    await signOut({ redirectTo: "/" });
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-bone/10 bg-ink/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -46,18 +51,13 @@ export async function Header() {
             <Link href="/dashboard/account" className="text-sm font-medium text-bone/70 hover:text-bone">
               Account
             </Link>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
+            <form action={handleSignOut}>
               <button className="text-sm font-medium text-bone/70 hover:text-bone">
                 Sign out
               </button>
             </form>
           </div>
-          <Menu links={navLinks} isAdmin={user?.role === "ADMIN"} />
+          <Menu links={navLinks} isAdmin={user?.role === "ADMIN"} onSignOut={handleSignOut} />
         </div>
       </div>
     </header>
